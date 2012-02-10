@@ -5,6 +5,14 @@ Class SocketServer(Process):
         
         
     def run(self, )
-        #open the two socket 
+        #open the two socket and listen to them
+        post_socket = socket.create_connexion()
+        get_socket = socket
         while 1:
             
+            
+    def post_handler():
+        #handle the post request
+        
+    def get_handler():
+        #handle the get request
