@@ -60,6 +60,8 @@ def post(utf8_text,
         prefered_uid=None,
         linked_uid_list=None):
     check_db()
+    if expiry_policy not in policies:
+        raise ValueError("Policy %s is not in policies" % expiry_policy)
     entry = {}
     entry['utf8_text'] = utf8_text
     entry['expiry_policy'] = expiry_policy

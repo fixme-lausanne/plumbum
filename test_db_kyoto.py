@@ -21,3 +21,9 @@ print(dbk.retrieve_json(uid))
 print(dbk.retrieve(uid))
 print(dbk.get_creation_timestamp(uid))
 
+try:
+    dbk.post("test", expiry_policy='NO_SUCH_POLICY')
+except ValueError:
+    pass
+
+dbk.bye()
