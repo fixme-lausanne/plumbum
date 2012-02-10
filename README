@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-README file
-=======
-test
->>>>>>> dd4d6d62a2ee2cd67ff9f5f8007fea11a182e96f
+Socket
+just call SocketServerManager().start(), it will create two socket server on port 1338 and 1339. That's all you need.
+
