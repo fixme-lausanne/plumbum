@@ -47,7 +47,7 @@ def retrieve(uid):
     check_db()
     jentry = db.get(uid)
     if not jentry:
-        print("get error: " + str(db.error()))
+        raise DataBaseError("get error: " + str(db.error()))
     else:
         return json.loads(jentry.decode())
 
