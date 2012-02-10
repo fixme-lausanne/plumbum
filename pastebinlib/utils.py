@@ -4,7 +4,7 @@ import string
 
 
 def make_uid(content):
-    return md5.new(content).digest()
+    return md5.new(content).hexdigest()
 
 
 def refine_uid(uid):
