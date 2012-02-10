@@ -1,6 +1,7 @@
 from socket import socket
 
-Class SocketServerManager(Process):
+
+class SocketServerManager(Process):
 
     def __init__(self, post_port=1338, get_port=1339, host=None):
         self = Process.__init__(self)
@@ -18,10 +19,10 @@ Class SocketServerManager(Process):
         for i in self.servers:
             i.start()
 
-    def post_handler():
+    def post_handler(self, conn, addr):
         #handle the post request
 
-    def get_handler():
+    def get_handler(self, conn, addr):
         #handle the get request
 
 class SocketServer(SocketServer):
