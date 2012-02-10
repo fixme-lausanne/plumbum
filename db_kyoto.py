@@ -45,6 +45,7 @@ def init(db_file="casket.kch"):
 
 def bye():
     global db
+    check_db()
     if not db.close():
         raise DataBaseError("close error: " + str(db.error()))
     db = None

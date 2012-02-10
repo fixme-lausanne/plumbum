@@ -10,10 +10,14 @@ try:
 except dbk.DataBaseError:
     pass
 
+try:
+    dbk.bye()
+except dbk.DataBaseError:
+    pass
+
 dbk.init()
 uid = dbk.post("test")
 print(dbk.retrieve_json(uid))
 print(dbk.retrieve(uid))
 print(dbk.get_creation_timestamp(uid))
-#dbk.bye()
 
