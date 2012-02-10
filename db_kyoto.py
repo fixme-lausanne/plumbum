@@ -42,7 +42,7 @@ def retrieve(uid):
     return json.loads(jentry)
 
 def get_creation_timestamp(uid):
-    pass
+    return retrieve(uid)['timestamp']
 
 def get_linked(uid):
     pass
