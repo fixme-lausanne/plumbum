@@ -69,7 +69,7 @@ def post(utf8_text,
     db.set(hash_, jentry)
     return hash_
 
-def retrieve(uid):
+def retrieve_json(uid):
     check_db()
     jentry = db.get(uid)
     if not jentry:
@@ -77,8 +77,11 @@ def retrieve(uid):
     else:
         return json.loads(jentry.decode())
 
+def retrieve(uid):
+    return retrieve_json(uid)['utf8_text']
+
 def get_creation_timestamp(uid):
-    return retrieve(uid)['timestamp']
+    return retrieve_json(uid)['timestamp']
 
 def get_linked(uid):
     pass
