@@ -3,6 +3,8 @@ import json
 from hashlib import sha1
 import kyotocabinet as kc
 
+""" Interact with Kyoto Cabinet """
+
 policies = ['NEVER', 'AFTER_READ']
 db = None
 
@@ -39,11 +41,15 @@ def post(utf8_text,
     hash_ = sha1(("".join(entry.values())).encode("utf-8")).hexdigest()[:8]
     jentry = json.dumps(entry)
     db.set(hash_, jentry)
+    return hash_
 
 def retrieve(uid):
     check_db()
-    jentry = db.get(uid).decode()
-    return json.loads(jentry)
+    jentry = db.get(uid)
+    if not jentry:
+        print("get error: " + str(db.error()))
+    else:
+        return json.loads(jentry.decode())
 
 def get_creation_timestamp(uid):
     return retrieve(uid)['timestamp']

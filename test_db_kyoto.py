@@ -11,8 +11,8 @@ except dbk.DataBaseError:
     pass
 
 dbk.init()
-dbk.post("test")
-print(dbk.retrieve("ee229238"))
-print(dbk.get_creation_timestamp("ee229238"))
-dbk.bye()
+uid = dbk.post("test")
+print(dbk.retrieve(uid))
+print(dbk.get_creation_timestamp(uid))
+#dbk.bye()
 
