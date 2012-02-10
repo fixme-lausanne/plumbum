@@ -1,5 +1,8 @@
-import kyotocabinet as kc
 import sys
+import time
+import json
+from hashlib import sha1
+import kyotocabinet as kc
 
 policies = ['NEVER', 'AFTER_READ']
 db = None
@@ -24,10 +27,19 @@ def post(utf8_text,
         prefered_uid=None,
         linked_uid_list=None):
     # must add a timestap too
-    pass
+    entry = {}
+    entry['utf8_text'] = utf8_text
+    entry['expiry_policy'] = expiry_policy
+    entry['timeout'] = str(timeout)
+    entry['timestamp'] = str(time.time())
+    hash_ = sha1(("".join(entry.values())).encode("utf-8")).hexdigest()[:8]
+    jentry = json.dumps(entry)
+    print(hash_, jentry)
+    db.set(hash_, jentry)
 
 def retrieve(uid):
-    pass
+    jentry = db.get(uid).decode()
+    return json.loads(jentry)
 
 def get_creation_timestamp(uid):
     pass
