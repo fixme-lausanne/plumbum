@@ -1,1 +1,4 @@
 test
+
+Socket
+just call SocketServerManager().start(), it will create two socket server on port 1338 and 1339. That's all you need.
