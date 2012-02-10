@@ -1,10 +1,10 @@
-import md5
+import hashlib
 import random
 import string
 
 
 def make_uid(content):
-    return md5.new(content).hexdigest()
+    return hashlib.md5(content).hexdigest()
 
 
 def refine_uid(uid):
