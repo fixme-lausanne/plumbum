@@ -34,7 +34,6 @@ def post(utf8_text,
     entry['timestamp'] = str(time.time())
     hash_ = sha1(("".join(entry.values())).encode("utf-8")).hexdigest()[:8]
     jentry = json.dumps(entry)
-    print(hash_, jentry)
     db.set(hash_, jentry)
 
 def retrieve(uid):
