@@ -14,6 +14,7 @@ def post(utf8_text, expiry_policy=api.EXPIRY_NEVER, timeout=0,
     while uid in _db:
         uid = utils.refine_uid(uid)
     _db[uid] = TextAndTimestamp(utf8_text, time.time())
+    return uid
 
 
 def retrieve(uid):
@@ -32,4 +33,4 @@ def _get_entry(uid):
     try:
         return _db[uid]
     except KeyError:
-        raise api.NonExistentUID(uid)    
+        raise api.NonExistentUID(uid)
