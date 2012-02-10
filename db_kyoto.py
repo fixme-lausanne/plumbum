@@ -11,10 +11,10 @@ db = None
 class DataBaseError(Exception):
     pass
 
-def init():
+def init(db_file="casket.kch"):
     global db
     db = kc.DB()
-    if not db.open("casket.kch", kc.DB.OWRITER | kc.DB.OCREATE):
+    if not db.open(db_file, kc.DB.OWRITER | kc.DB.OCREATE):
         raise DataBaseError("open error: " + str(db.error()))
 
 def bye():
