@@ -11,8 +11,17 @@ Class SocketServer(Process):
         while 1:
             
             
-    def post_handler():
+    def post_handler(self, conn, addr):
         #handle the post request
         
-    def get_handler():
+    def get_handler(self, conn, addr):
         #handle the get request
+        uid = list()
+        while 1:
+            if not data: break
+            buf = conn.recv(1024)
+            uid += buf
+        data = retrieve(uid)
+        conn.senall(data)
+        conn.close()
+        print 'Data retrieved'
