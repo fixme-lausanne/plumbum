@@ -26,14 +26,34 @@ Class SocketServerManager(Process):
 
 class SocketServer(SocketServer):
     SEM_MAX = 30
-
+    
     def __init__(self, callback_method, skt):
         self = Process.__init__(self)
         self.skt = skt
         self.sem = Semaphore(SocketServer.SEM_MAX)
 
     def run(self):
-        s.listen()
+        af, socktype, proto, canonname, sa = self.res
+        try:
+            s = socket.socket(af, socktype, proto)
+        except socket.error, msg:
+            s = None
+            continue
+
+        try:
+            s.bind(sa)
+            s.listen(1)
+        except socket.error, msg:
+            #pretty bad
+            s.close()
+            s = None
+            continue
+            
+        if s is None:
+            print("Could not open socket")
+            return
+            
         while 1:
-            addr = s.listen(1)
-            s.callback()
+            
+            conn, addr = s.accept()
+            s.callback(conn, addr)
