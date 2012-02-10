@@ -1,4 +1,5 @@
-from pastebin.memory_db import post, retrieve, NonExistentUID
+from pastebinlib.memorydb import post, retrieve
+from pastebinlib.api import NonExistentUID
 
 import unittest
 
