@@ -1,4 +1,3 @@
-import sys
 import time
 import json
 from hashlib import sha1
@@ -7,26 +6,31 @@ import kyotocabinet as kc
 policies = ['NEVER', 'AFTER_READ']
 db = None
 
+class DataBaseError(Exception):
+    pass
+
 def init():
-    # create the database object
     global db
     db = kc.DB()
-    # open the database
     if not db.open("casket.kch", kc.DB.OWRITER | kc.DB.OCREATE):
-        print("open error: " + str(db.error()), file=sys.stderr)
+        raise DataBaseError("open error: " + str(db.error()))
 
 def bye():
-    # close the database
+    global db
     if not db.close():
-        print("close error: " + str(db.error()), file=sys.stderr)
+        raise DataBaseError("close error: " + str(db.error()))
+    db = None
 
+def check_db():
+    if not db:
+        raise DataBaseError("database not open ")
 
 def post(utf8_text,
         expiry_policy='NEVER',
         timeout=None,
         prefered_uid=None,
         linked_uid_list=None):
-    # must add a timestap too
+    check_db()
     entry = {}
     entry['utf8_text'] = utf8_text
     entry['expiry_policy'] = expiry_policy
@@ -37,6 +41,7 @@ def post(utf8_text,
     db.set(hash_, jentry)
 
 def retrieve(uid):
+    check_db()
     jentry = db.get(uid).decode()
     return json.loads(jentry)
 
