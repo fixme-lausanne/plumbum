@@ -3,7 +3,28 @@ import json
 from hashlib import sha1
 import kyotocabinet as kc
 
-""" Interact with Kyoto Cabinet """
+""" Interact with Kyoto Cabinet
+
+Example
+-------
+
+import db_kyoto as dbk
+dbk.init()
+uid = dbk.post("test")
+print(dbk.retrieve(uid))
+
+Notes
+-----
+
+All db access methods will raise a DataBaseError if they don't succeed.
+Thus you should enclose them in a try-except like:
+
+try:
+    uid = dbk.post("test")
+except DataBaseError
+    pass
+
+"""
 
 policies = ['NEVER', 'AFTER_READ']
 db = None
