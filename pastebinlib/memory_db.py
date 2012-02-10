@@ -8,7 +8,8 @@ _db = {}
 TextAndTimestamp = namedtuple('TextAndTimestamp', 'text timestamp')
 
 
-def post(utf8_text, expiry_policy=api.EXPIRY_NEVER, timeout=0, prefered_uid=None, _linked_uid_list=None):
+def post(utf8_text, expiry_policy=api.EXPIRY_NEVER, timeout=0, 
+         prefered_uid=None, _linked_uid_list=None):
     uid = utils.make_uid(utf8_text)
     while uid in _db:
         uid = utils.refine_uid(uid)
