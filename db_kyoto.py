@@ -24,6 +24,11 @@ try:
 except DataBaseError
     pass
 
+TODO
+----
+prefered_uid is not implemented
+linked_uid_list is not implemented
+
 """
 
 policies = ['NEVER', 'AFTER_READ']
