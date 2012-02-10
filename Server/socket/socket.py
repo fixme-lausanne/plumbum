@@ -12,8 +12,8 @@ class SocketServerManager(Process):
 
     def run(self)
         #open the two socket and listen to them
-
-            
+        for s in self.servers:
+            s.start()
             
     def post_handler(self, conn, addr):
         #handle the post request
@@ -30,9 +30,7 @@ class SocketServerManager(Process):
         if state:
         conn.close()
         print 'Data retrieved'
-=======
-    
->>>>>>> 5e0873151389c11fd76e5fc6e540420658d962be
+            
     @staticmethod
     def socket_server_factory(host, port, callback):
         s = socket.getaddrinfo(host, port, family=0, socktype=0, proto=0, flags=0)
@@ -78,10 +76,5 @@ class SocketServer(SocketServer):
             return
             
         while 1:
-            
-<<<<<<< HEAD
             conn, addr = s.accept()
             s.callback(conn, addr)
-=======
->>>>>>> 6e77d8a0c0d98c863952f010dd3eff3b5d358d40
->>>>>>> 5e0873151389c11fd76e5fc6e540420658d962be
