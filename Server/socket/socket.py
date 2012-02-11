@@ -43,12 +43,6 @@ class SocketServerManager(Process):
         for i in self.servers:
             i.start()
 
-    def post_handler(self, conn, addr):
-        #handle the post request
-
-    def get_handler(self, conn, addr):
-        #handle the get request
-
 class SocketServer(SocketServer):
     SEM_MAX = 30
     
@@ -78,6 +72,12 @@ class SocketServer(SocketServer):
             print("Could not open socket")
             return
             
+        @staticmethod
+        def with_sem(f, *args):
+            self.sem.acquire()
+            f(args)
+            self.sem.release()
+        
         while 1:
             conn, addr = s.accept()
-            s.callback(conn, addr)
+            with_sem(s.callback, (conn, addr))
