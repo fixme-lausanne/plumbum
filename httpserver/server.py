@@ -5,9 +5,14 @@ from os.path import dirname, abspath
 import sys
 sys.path.append(dirname(dirname(abspath(__file__))))
 
+try: 
+    import pastebinlib.db_kyoto as db
+except:
+    print('Cannot import kyoto db, falling back to memory db (reason for failure: %s)' % sys.exc_info()[0] )
+    import pastebinlib.db_memory as db
+
 from bottle import route, run, request, abort, template, HTTPResponse
 from pastebinlib.api import NonExistentUID
-import pastebinlib.db_memory as db
 
 
 @route('/', method='GET')
