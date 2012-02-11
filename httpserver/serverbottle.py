@@ -3,6 +3,7 @@ import pastebinlib.db_kyoto as dbk
 from pastebinlib.api import NonExistentUID
 
 app = Bottle()
+
 @app.route('/')
 def index():
     return 'Welcome to our pastebin app'
@@ -19,10 +20,10 @@ def retrieve(uid=None):
     
 @app.route('/', method='POST')
 def post(prefered_uid=None):
-    content = request.forms.get('code')
+    content = request.forms.get('lead')
     uid = dbk.post(content, prefered_uid=prefered_uid)
     return uid
     
-def run_server(port=8000):
+def run_server(port=8000, host='localhost'):
     dbk.init()
-    run(app, port=port)
+    run(app, host=host, port=port)
