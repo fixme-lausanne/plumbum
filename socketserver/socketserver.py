@@ -29,7 +29,7 @@ class SocketServerManager():
             content += buf
         print(content)
         uid = "32" #TODO
-        conn.sendall(uid)
+        conn.sendall(uid.encode('UTF-8'))
 
     def get_handler(self, conn, addr):
         #handle the get request
@@ -41,7 +41,7 @@ class SocketServerManager():
             uid += buf
         #data = retrieve(uid) #TODO
         data = "kakapout"
-        state = conn.sendall(data)
+        state = conn.sendall(data.encode("UTF-8"))
         if state:
             logging.debug('Data not fully transmitted')
             logging.info('The data sent have not been transmitted properly')
