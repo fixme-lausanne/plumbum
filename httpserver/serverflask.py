@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 from flask import Flask, request
-import db_kyoto as dbk
+import pastebinlib.db_kyoto as dbk
 from pygments import highlight
 from pygments.lexers import get_lexer_by_name
 from pygments.formatters import HtmlFormatter

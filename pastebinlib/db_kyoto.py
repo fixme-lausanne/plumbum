@@ -56,7 +56,7 @@ def post(utf8_text,
     entry['expiry_policy'] = expiry_policy
     entry['timestamp'] = str(time.time())
     hash_ = utils.make_uid(utf8_text, expiry_policy, preferred_uid, entry['timestamp'])
-        
+
     jentry = json.dumps(entry)
     write_success = db.add(hash_, jentry)
     while not write_success:
@@ -94,4 +94,4 @@ def _check_db():
         init()
 
 
-        
+
