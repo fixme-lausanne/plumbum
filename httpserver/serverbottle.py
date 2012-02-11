@@ -2,13 +2,21 @@
 # Add the parent path of this file to pythonpath, so we can import pastebinlib
 from os.path import dirname, abspath
 import sys
+import logging
+from pygments import highlight
+from pygments.lexers import PythonLexer
+from pygments.formatters import HtmlFormatter
 
 sys.path.append(dirname(dirname(abspath(__file__))))
-
-import pygments
-from bottle import route, run, request, abort, template, HTTPResponse
 from pastebinlib.api import NonExistentUID
-import pastebinlib.db_memory as db
+try:
+    import pastebinlib.db_kyoto as db
+except:
+    logging.error('Cannot import kyoto db, falling back to memory db \
+(reason for failure: %s)' % sys.exc_info()[0])
+    import pastebinlib.db_memory as db
+from bottle import route, run, request, abort, template, HTTPResponse
+
 
 @route('/', method='GET')
 def index():
@@ -36,11 +44,12 @@ def retrieve(uid):
     except NonExistentUID:
         abort(404, 'No such item "%s"' % uid)
 
+
 @route('/:uid/color', method='GET')
 def retrieve_color(uid):
     try:
         raw_paste = db.retrieve(uid)
-        
+        return highlight(code, PythonLexer(), HtmlFormatter())
     except NonExistentUID:
         abort(404, 'No such item "%s"' % uid)
 
