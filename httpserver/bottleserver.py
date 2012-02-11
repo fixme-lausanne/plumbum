@@ -11,15 +11,9 @@ try:
 except ImportError:
     logging.error('Cannot import pygments lib, will not provide \
 coloration')
-    
+import database as db
 sys.path.append(dirname(dirname(abspath(__file__))))
 from database.api import NonExistentUID
-try:
-    import database.db_kyoto as db
-except ImportError:
-    logging.error('Cannot import kyoto db, falling back to memory db \
-(reason for failure: {})'.format(sys.exc_info()[0]))
-    import database.db_memory as db
 from httpserver.bottle import route, run, request, abort, HTTPResponse, Bottle
 from httpserver.bottle import template as _template
 
