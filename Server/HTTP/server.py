@@ -13,8 +13,10 @@ class RequestHandler(BaseHTTPRequestHandler):
         m = reg.match(self.path)
         if m != None:
             print('got id: %s'%m.group(1))
-
-        print('received GET'+self.path)
+            self.send_response(200)
+            self.send_header('Content-type', 'text/plain')
+            self.end_headers()
+            self.wfile.write(b'asdasd')
         
 
 httpd = HTTPServer(('', 8000), RequestHandler)
