@@ -151,6 +151,8 @@ class SocketServer(Process):
         fs(arg[0], arg[1])
         self.sem.release()
 
+def start():
+    SocketServerManager.run()
 
 if __name__ == "__main__":
     SocketServerManager().run()
