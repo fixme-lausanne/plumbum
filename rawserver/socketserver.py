@@ -110,7 +110,6 @@ class SocketServer(Process):
     def bound(self, s):
         """Bound the server to the socket and listen to new connection"""
         af, socktype, proto, _canonname, sa = s
-        print(s)
         try:
             s = socket.socket(af, socktype, proto)
         except socket.error as msg:
@@ -138,18 +137,18 @@ class SocketServer(Process):
     def run(self):
         """run the server"""
         threads = []
-        for s in self.skt:
-            t = Thread(target=self.bound, args=(s, ))
-            threads.append(t)
-            t.start()
-        for t in threads:
-            t.join()
+        for skt in self.skts:
+            thread = Thread(target=self.bound, args=(skt, ))
+            threads.append(thread)
+            thread.start()
+        for thread in threads:
+            thread.join()
 
-    def with_sem(self, f, arg):
+    def with_sem(self, fs, arg):
         """Decorator for the callback function, limite the maximum
         number of simultaneous thread"""
         self.sem.acquire()
-        f(arg[0], arg[1])
+        fs(arg[0], arg[1])
         self.sem.release()
 
 
