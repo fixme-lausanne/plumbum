@@ -1,6 +1,7 @@
-import httpserver.bottleserver as httpserver
-import rawserver 
+#!/usr/bin/env python
+import httpserver.bottleserver as http
+import rawserver.rawserver as raw
 
 if __name__ == "__main__":
-    rawserver.start()
-    httpserver.start()
+    raw.start()
+    http.start()
