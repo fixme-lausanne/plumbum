@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# Add the parent path of this file to the pythonpath, so we can import pastebinlib
+# Add the parent path of this file to pythonpath, so we can import pastebinlib
 from os.path import dirname, abspath
 import sys
 sys.path.append(dirname(dirname(abspath(__file__))))
@@ -24,18 +24,15 @@ def post():
         return template('templates/paste_done', url=url)
     else:
         return HTTPResponse(status=201, header={'Location': url})
-        
-    
+
 
 @route('/<uid>')
 def retrieve(uid):
     try:
         return db.retrieve(uid)
     except NonExistentUID:
-        abort(404, 'No such item "%s"' % uid)    
-    
-    
+        abort(404, 'No such item "%s"' % uid)
+
+
 if __name__ == '__main__':
-    import sys
-    print(sys.version_info)
     run(host='0.0.0.0', port=8080, debug=True)
