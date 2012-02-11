@@ -1,6 +1,6 @@
 import socket
 from multiprocessing import Process
-from threading import Semaphore
+from threading import Semaphore, Thread
 import logging
 
 class SocketServerManager(Process):
@@ -9,9 +9,9 @@ class SocketServerManager(Process):
     def __init__(self, post_port=1338, get_port=1339, host=None):
         Process.__init__(self)
         self.servers = []
-        post_serv = SocketServerManager.socket_server_factory(host, post_port, self.get_handler)
+        post_serv = self.socket_server_factory(host, post_port, self.get_handler)
         self.servers.append(post_serv)
-        get_serv = SocketServerManager.socket_server_factory(host, get_port, self.post_handler)
+        get_serv = self.socket_server_factory(host, get_port, self.post_handler)
         self.servers.append(get_serv)
 
     def post_handler(self, conn, addr):
@@ -44,25 +44,29 @@ class SocketServerManager(Process):
         conn.close()
         print('Data retrieved')
             
-    @staticmethod
-    def socket_server_factory(host, port, callback):
-        s = socket.getaddrinfo(host, port, family=0, socktype=0, proto=0, flags=0)
+    def socket_server_factory(self, host, port, callback):
+        s = socket.getaddrinfo(host, port)
         return SocketServer(callback, s)
 
     def run(self):
-        for i in self.servers:
-            i.start()
+        for s in self.servers[:-2]:
+            s.start()
+        self.servers[-1].run()
 
 class SocketServer(SocketServerManager):
     SEM_MAX = 30
     
     def __init__(self, callback_method, skt):
-        self = Process.__init__(self)
+        Process.__init__(self)
         self.skt = skt
         self.sem = Semaphore(SocketServer.SEM_MAX)
 
     def run(self):
-        af, socktype, proto, canonname, sa = self.skt
+        for s in self.skt:
+            Thread(target=bound, args=(self, s)).start()
+            
+    def bound(self, s):
+        
         try:
             s = socket.socket(af, socktype, proto)
         except socket.error as msg:
@@ -81,15 +85,15 @@ class SocketServer(SocketServerManager):
             logging.error("Could not start server, socket cannot be bound")
             return
             
-        @staticmethod
-        def with_sem(f, *args):
+        while 1:
+            print("CONNECTION")
+            conn, addr = s.accept()
+            Thread(target=self.with_sem, args=(s.callback, (conn, addr)))
+
+        def with_sem(self, f, *args):
             self.sem.acquire()
             f(args)
             self.sem.release()
-        
-        while 1:
-            conn, addr = s.accept()
-            with_sem(s.callback, (conn, addr))
             
 if __name__ == "__main__":
     SocketServerManager().start()
