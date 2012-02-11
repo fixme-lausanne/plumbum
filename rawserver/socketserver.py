@@ -152,7 +152,7 @@ class SocketServer(Process):
         self.sem.release()
 
 def start():
-    SocketServerManager.run()
+    SocketServerManager().run()
 
 if __name__ == "__main__":
     SocketServerManager().run()
