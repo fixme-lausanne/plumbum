@@ -10,12 +10,13 @@ from os.path import dirname, abspath
 import sys
 sys.path.append(dirname(dirname(abspath(__file__))))
 
-try: 
+try:
     import pastebinlib.db_kyoto as db
 except:
-    print('Cannot import kyoto db, falling back to memory db (reason for failure: %s)' % sys.exc_info()[0] )
+    print('Cannot import kyoto db, falling back to memory db \
+(reason for failure: %s)' % sys.exc_info()[0])
     import pastebinlib.db_memory as db
-    
+
 from pastebinlib.api import NonExistentUID
 
 
@@ -28,11 +29,12 @@ class SocketServerManager():
         self.get_port = get_port
         self.host = host
         self.servers = []
-        post_serv = self.socket_server_factory(self.host, self.post_port, self.get_handler)
+        post_serv = self.socket_server_factory(self.host, self.post_port,
+self.get_handler)
         self.servers.append(post_serv)
-        get_serv = self.socket_server_factory(self.host, self.get_port, self.post_handler)
+        get_serv = self.socket_server_factory(self.host, self.get_port,
+self.post_handler)
         self.servers.append(get_serv)
-
 
     def post_handler(self, conn, addr):
         #handle the post request
@@ -78,6 +80,7 @@ class SocketServerManager():
             s.start()
         for s in self.servers:
             s.join()
+
 
 class SocketServer(Process):
     SEM_MAX = 30
