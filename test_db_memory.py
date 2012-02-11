@@ -1,4 +1,4 @@
-from pastebinlib.memorydb import post, retrieve, get_creation_timestamp, _db
+from pastebinlib.db_memory import post, retrieve, get_creation_timestamp, _db
 from pastebinlib.api import NonExistentUID
 
 import unittest
@@ -21,7 +21,13 @@ class TestMemoryDB(unittest.TestCase):
             retrieve('not here')
 
     def testCollisions(self):
+        ''' This is design choice: when the same content is posted again
+        it gets a new uid (and new metadata, etc...) '''
         a_uid = post('a')
         another_uid = post('a')
+        self.assertNotEqual(a_uid, another_uid)
         
+
+if __name__ == '__main__':
+    unittest.main()
     
