@@ -6,7 +6,7 @@ import logging
 
 class SocketServerManager(Process):
     BUF_SIZE = 1024
-    
+
     def __init__(self, post_port=1338, get_port=1339, host=None):
         Process.__init__(self)
         self.post_port = post_port
@@ -32,7 +32,7 @@ class SocketServerManager(Process):
         uid = list()
         while 1:
             buf = conn.recv(SocketServerManager.BUF_SIZE)
-            if not buf: 
+            if not buf:
                 break
             uid += buf
         #data = retrieve(uid) #TODO
@@ -44,7 +44,7 @@ class SocketServerManager(Process):
             logging.warning('Transmission error')
         conn.close()
         print('Data retrieved')
-            
+
     def socket_server_factory(self, host, port, callback):
         s = socket.getaddrinfo(host, port)
         return SocketServer(callback, s)
@@ -61,7 +61,7 @@ class SocketServerManager(Process):
 
 class SocketServer(SocketServerManager):
     SEM_MAX = 30
-    
+
     def __init__(self, callback_method, skt):
         Process.__init__(self)
         self.skt = skt
@@ -73,8 +73,8 @@ class SocketServer(SocketServerManager):
         try:
             s = socket.socket(af, socktype, proto)
         except socket.error as msg:
-            return 
-            
+            return
+
         try:
             s.bind(sa)
             s.listen(1)
@@ -83,16 +83,16 @@ class SocketServer(SocketServerManager):
             print(msg)
             s.close()
             s = None
-            
+
         if s is None:
             logging.error("Could not start server, socket cannot be bound")
             return
-            
+
         while 1:
             print("CONNECTION")
             conn, addr = s.accept()
             Thread(target=self.with_sem, args=(self.callback, (conn, addr)))
-            
+
     def run(self):
         threads = []
         for s in self.skt:
@@ -101,11 +101,11 @@ class SocketServer(SocketServerManager):
             t.start()
         for t in threads:
             t.join()
-            
+
     def with_sem(self, f, *args):
         self.sem.acquire()
         f(args)
         self.sem.release()
-            
+
 if __name__ == "__main__":
     SocketServerManager().start()
