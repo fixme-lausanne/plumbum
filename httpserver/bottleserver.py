@@ -20,7 +20,7 @@ except ImportError:
     logging.error('Cannot import kyoto db, falling back to memory db \
 (reason for failure: {})'.format(sys.exc_info()[0]))
     import pastebinlib.db_memory as db
-from httpserver.bottle import route, run, request, abort, HTTPResponse, Bottle
+from httpserver.bottle import run, request, abort, HTTPResponse, Bottle
 from httpserver.bottle import template as _template
 
 def template(path, base='httpserver/templates', **kwargs):
