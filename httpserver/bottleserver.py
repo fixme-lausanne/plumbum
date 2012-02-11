@@ -53,7 +53,6 @@ def raw_retrieve(uid):
 
 @route('/:uid', method='GET')
 def retrieve(uid):
-    if
     """Fetch a pastebin entry with coloration using Pygments lib"""
     try:
         raw_paste = db.retrieve(uid)
