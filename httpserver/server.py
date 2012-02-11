@@ -1,13 +1,10 @@
 #!/usr/bin/env python
 
-from http.server import *
-from pprint import pprint
 import logging
 import re
 
 class RequestHandler(BaseHTTPRequestHandler):
-
-
+    
     def do_POST(self):
         header = open('templates/header.tpl', 'r').read()
         footer = open('templates/footer.tpl', 'r').read()
