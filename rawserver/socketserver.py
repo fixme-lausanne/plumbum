@@ -21,9 +21,13 @@ from pastebinlib.api import NonExistentUID
 
 
 class SocketServerManager():
+    """Class that create the socket servers and assign callback to them"""
+
+    """Size of the receive buffer"""
     BUF_SIZE = 1024
 
     def __init__(self, post_port=1338, get_port=1339, host=None):
+        """simple init, the server will be bound on host"""
         Process.__init__(self)
         self.post_port = post_port
         self.get_port = get_port
@@ -37,6 +41,8 @@ self.post_handler)
         self.servers.append(get_serv)
 
     def post_handler(self, conn, addr):
+        """handle the depot of a new paste from an already alive
+        connexion"""
         #handle the post request
         content = list()
         while 1:
@@ -50,6 +56,8 @@ self.post_handler)
         conn.close()
 
     def get_handler(self, conn, addr):
+        """handle the retrieving of a already created pastebin from
+        a existant connexion, then close the connexion"""
         #handle the get request
         uid = list()
         while 1:
@@ -70,12 +78,15 @@ self.post_handler)
         print('Data retrieved')
 
     def socket_server_factory(self, host, port, callback):
+        """create a new SocketServer instance bound on the port port and
+        host host. It will call the callback on new incoming connexion"""
         s = socket.getaddrinfo(host, port)
         server = SocketServer(callback, s)
         server.daemon = True
         return server
 
     def run(self):
+        """start the servers and wait for them to be stopped"""
         for s in self.servers:
             s.start()
         for s in self.servers:
@@ -83,15 +94,21 @@ self.post_handler)
 
 
 class SocketServer(Process):
+    """A simple telnet server with a callback"""
+
+    """define the number of simultaneous thread that can be awaken to
+    handle the connexions"""
     SEM_MAX = 30
 
     def __init__(self, callback_method, skt):
+        """Simple init"""
         Process.__init__(self)
         self.callback = callback_method
         self.skt = skt
         self.sem = Semaphore(SocketServer.SEM_MAX)
 
     def bound(self, s):
+        """Bound the server to the socket and listen to new connection"""
         af, socktype, proto, _canonname, sa = s
         print(s)
         try:
@@ -119,6 +136,7 @@ class SocketServer(Process):
             t.run()
 
     def run(self):
+        """run the server"""
         threads = []
         for s in self.skt:
             t = Thread(target=self.bound, args=(s, ))
@@ -128,6 +146,8 @@ class SocketServer(Process):
             t.join()
 
     def with_sem(self, f, arg):
+        """Decorator for the callback function, limite the maximum
+        number of simultaneous thread"""
         self.sem.acquire()
         f(arg[0], arg[1])
         self.sem.release()
