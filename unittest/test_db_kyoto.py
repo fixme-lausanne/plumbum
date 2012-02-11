@@ -1,9 +1,9 @@
 from os.path import dirname, abspath
 import sys
 sys.path.append(dirname(dirname(abspath(__file__))))
-import pastebinlib.db_kyoto as dbk
+import database.db_kyoto as dbk
 import logging
-from pastebinlib.api import NonExistentUID
+from database.api import NonExistentUID
 
 try:
     dbk.post("test")
