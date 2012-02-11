@@ -100,11 +100,11 @@ class SocketServer(Process):
     handle the connexions"""
     SEM_MAX = 30
 
-    def __init__(self, callback_method, skt):
+    def __init__(self, callback_method, skts):
         """Simple init"""
         Process.__init__(self)
         self.callback = callback_method
-        self.skt = skt
+        self.skts = skts
         self.sem = Semaphore(SocketServer.SEM_MAX)
 
     def bound(self, s):
