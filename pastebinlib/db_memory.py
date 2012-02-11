@@ -11,10 +11,10 @@ TextAndTimestamp = namedtuple('TextAndTimestamp', 'text timestamp')
 _lock = Lock()
 
 def post(utf8_text, expiry_policy=api.EXPIRY_NEVER, timeout=0, 
-         prefered_uid=None, _linked_uid_list=None):
+         preferred_uid=None, _linked_uid_list=None):
     with _lock:
         timestamp = time.time()
-        uid = utils.make_uid(utf8_text, expiry_policy, timeout, prefered_uid, timestamp)
+        uid = utils.make_uid(utf8_text, expiry_policy, timeout, preferred_uid, timestamp)
         while uid in _db:
             uid = utils.refine_uid(uid)
         _db[uid] = TextAndTimestamp(utf8_text, timestamp)
