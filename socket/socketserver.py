@@ -91,7 +91,7 @@ class SocketServer(SocketServerManager):
         while 1:
             print("CONNECTION")
             conn, addr = s.accept()
-            Thread(target=self.with_sem, args=(s.callback, (conn, addr)))
+            Thread(target=self.with_sem, args=(self.callback, (conn, addr)))
             
     def run(self):
         threads = []
