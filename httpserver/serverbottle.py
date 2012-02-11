@@ -14,7 +14,7 @@ def retrieve(uid=None):
     try:
         content = dbk.retrieve(uid)
     except NonExistentUID:
-        return index
+        return index()
     return content
     
 @route('/', method='POST')
