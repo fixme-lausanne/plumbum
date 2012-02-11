@@ -20,16 +20,17 @@ except ImportError:
     logging.error('Cannot import kyoto db, falling back to memory db \
 (reason for failure: {})'.format(sys.exc_info()[0]))
     import pastebinlib.db_memory as db
-from httpserver.bottle import route, run, request, abort, template, HTTPResponse
+from httpserver.bottle import route, run, request, abort, template, HTTPResponse, Bottle
 
+plubum = Bottle()
 
-@route('/', method='GET')
+@plubum.route('/', method='GET')
 def index():
     """Display the home page"""
     return template('templates/paste_form')
 
 
-@route('/', method='POST')
+@plubum.route('/', method='POST')
 def post():
     """Post a new pastebin"""
     content = request.forms.get('content')
@@ -42,7 +43,7 @@ def post():
         return HTTPResponse(status=201, header={'Location': url})
 
 
-@route('/:uid/raw', method='GET')
+@plubum.route('/:uid/raw', method='GET')
 def raw_retrieve(uid):
     """Fetch a pastebin entry without coloration"""
     try:
@@ -51,7 +52,7 @@ def raw_retrieve(uid):
         abort(404, 'No such item "%s"' % uid)
 
 
-@route('/:uid', method='GET')
+@plubum.route('/:uid', method='GET')
 def retrieve(uid):
     """Fetch a pastebin entry with coloration using Pygments lib"""
     try:
@@ -65,7 +66,7 @@ def retrieve(uid):
         return raw_retrieve(uid)
 
 def start(host='0.0.0.0', port=8080):
-    run(host, port)
+    run(plubum, host, port)
 
 if __name__ == '__main__':
-    run(host='0.0.0.0', port=8080, debug=True, reloader=True)
+    run(plubum, host='0.0.0.0', port=8080, debug=True, reloader=True)
