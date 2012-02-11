@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Plumbum http server based on bottle"""
-# Add the parent path of this file to pythonpath, so we can import pastebinlib
+# Add the parent path of this file to pythonpath, so we can import database
 from os.path import dirname, abspath, join
 import sys
 import logging
@@ -13,13 +13,13 @@ except ImportError:
 coloration')
     
 sys.path.append(dirname(dirname(abspath(__file__))))
-from pastebinlib.api import NonExistentUID
+from database.api import NonExistentUID
 try:
-    import pastebinlib.db_kyoto as db
+    import database.db_kyoto as db
 except ImportError:
     logging.error('Cannot import kyoto db, falling back to memory db \
 (reason for failure: {})'.format(sys.exc_info()[0]))
-    import pastebinlib.db_memory as db
+    import database.db_memory as db
 from httpserver.bottle import route, run, request, abort, HTTPResponse, Bottle
 from httpserver.bottle import template as _template
 
