@@ -13,13 +13,13 @@ class TestMemoryDB(unittest.TestCase):
 
     def setUp(self):
         _db.clear()
-        
+
     def testSimple(self):
         hai_uid = post('hai')
         logging.debug(hai_uid)
         self.assertEqual('hai', retrieve(hai_uid))
         self.assertTrue(time.time() - get_creation_timestamp(hai_uid) < 1)
-    
+
     def testNonExistent(self):
         with self.assertRaises(NonExistentUID):
             retrieve('not here')
@@ -30,8 +30,8 @@ class TestMemoryDB(unittest.TestCase):
         a_uid = post('a')
         another_uid = post('a')
         self.assertNotEqual(a_uid, another_uid)
-        
+
 
 if __name__ == '__main__':
     unittest.main()
-    
+
