@@ -48,6 +48,7 @@ def post():
 
 
 @plubum.route('/:uid/raw', method='GET')
+@plubum.route('/:uid/raw/', method='GET')
 def raw_retrieve(uid):
     """Fetch a pastebin entry without coloration"""
     try:
@@ -57,6 +58,7 @@ def raw_retrieve(uid):
 
 
 @plubum.route('/:uid', method='GET')
+@plubum.route('/:uid/', method='GET')
 def retrieve(uid):
     """Fetch a pastebin entry with coloration using Pygments lib"""
     try:
