@@ -4,11 +4,7 @@ from pastebinlib.api import NonExistentUID
 
 app = Bottle()
 
-@app.route('/')
-def index():
-    return 'Welcome to our pastebin app'
-
-@app.route('/<uid>')
+@app.route('/<uid>', method='GET')
 def retrieve(uid=None):
     if not uid:
         return index()
