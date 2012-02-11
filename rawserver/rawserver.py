@@ -20,7 +20,7 @@ except:
 from pastebinlib.api import NonExistentUID
 
 
-class SocketServerManager():
+class SocketServerManager(Thread):
     """Class that create the socket servers and assign callback to them"""
 
     """Size of the receive buffer"""
@@ -28,6 +28,7 @@ class SocketServerManager():
 
     def __init__(self, post_port=1338, get_port=1339, host=None):
         """simple init, the server will be bound on host"""
+        Thread.__init__(self)
         Process.__init__(self)
         self.post_port = post_port
         self.get_port = get_port
@@ -153,7 +154,7 @@ class SocketServer(Process):
         self.sem.release()
 
 def start():
-    Thread(target=SocketServerManager().run).start()
-
+    SocketServerManager().start()
+    
 if __name__ == "__main__":
     SocketServerManager().run()
