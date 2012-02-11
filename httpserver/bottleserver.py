@@ -53,6 +53,7 @@ def raw_retrieve(uid):
 
 @route('/:uid', method='GET')
 def retrieve(uid):
+    if
     """Fetch a pastebin entry with coloration using Pygments lib"""
     try:
         raw_paste = db.retrieve(uid)
@@ -61,6 +62,8 @@ def retrieve(uid):
         return template('templates/colorized', uid=uid, colorized_style=colorized_style, colorized_content=colorized_content)
     except NonExistentUID:
         abort(404, 'No such item "%s"' % uid)
+    except NameError:
+        return raw_retrieve(uid)
 
 if __name__ == '__main__':
     debug = True

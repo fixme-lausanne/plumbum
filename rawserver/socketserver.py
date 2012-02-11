@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-
+"""simple socket server with emulation of post/get using two port"""
 import socket
 from multiprocessing import Process
 from threading import Semaphore, Thread
