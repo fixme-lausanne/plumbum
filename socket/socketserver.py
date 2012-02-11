@@ -50,9 +50,10 @@ class SocketServerManager(Process):
         return SocketServer(callback, s)
 
     def run(self):
-        for s in self.servers[:-2]:
+        for s in self.servers:
             s.start()
-        self.servers[-1].run()
+        for s in self.servers:
+            s.join()
 
 class SocketServer(SocketServerManager):
     SEM_MAX = 30
@@ -64,6 +65,7 @@ class SocketServer(SocketServerManager):
 
     def bound(self, s):
         af, socktype, proto, canonname, sa = s
+        print(s)
         try:
             s = socket.socket(af, socktype, proto)
         except socket.error as msg:
