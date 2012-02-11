@@ -89,7 +89,8 @@ class SocketServer(Process):
         while 1:
             print("CONNECTION")
             conn, addr = s.accept()
-            Thread(target=self.with_sem, args=(self.callback, (conn, addr)))
+            t = Thread(target=self.with_sem, args=(self.callback, (conn, addr)))
+            t.run()
 
     def run(self):
         threads = []
