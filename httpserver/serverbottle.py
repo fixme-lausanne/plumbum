@@ -1,23 +1,9 @@
-from bottle import route, run, request, default_app
-import pastebinlib.db_kyoto as dbk
-from pastebinlib.api import NonExistentUID
+from bottle import run, route, request
 
-@route('/<uid>', method='GET')
-def retrieve(uid=None):
-    if not uid:
-        return "Nope"
-    try:
-        content = dbk.retrieve(uid)
-    except NonExistentUID:
-        return "Nope"
-    return content
-    
 @route('/', method='POST')
-def post(prefered_uid=None):
-    content = request.forms.get('lead')
-    uid = dbk.post(content, prefered_uid=prefered_uid)
-    return uid
+def index():
+    return ""
+def start():
+    run(host='localhost', port=8080)
     
-def run_server(port=8080, host='localhost'):
-    dbk.init()
-    run(host=host, port=port)
+start()
