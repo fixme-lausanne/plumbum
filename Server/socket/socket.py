@@ -1,39 +1,41 @@
-from socket import socket
+import socket
+from multiprocessing import Process
+from threading import Semaphore
 import logging
 
 class SocketServerManager(Process):
     BUF_SIZE = 1024
+    
     def __init__(self, post_port=1338, get_port=1339, host=None):
-        self = Process.__init__(self)
+        Process.__init__(self)
         self.servers = []
-        self.servers.append(socket_server_factory(host, post_port, self.get_handler))
-        self.servers.append(socket_server_factory(host, get_port, self.post_handler))
+        post_serv = SocketServerManager.socket_server_factory(host, post_port, self.get_handler)
         self.servers.append(post_serv)
+        get_serv = SocketServerManager.socket_server_factory(host, get_port, self.post_handler)
+        self.servers.append(get_serv)
 
-    def run(self)
-        #open the two socket and listen to them
-        for s in self.servers:
-            s.start()
-            
     def post_handler(self, conn, addr):
         #handle the post request
         content = list()
         while 1:
-            if not data:
+            buf = conn.recv(SocketServerManager.BUF_SIZE)
+            if not buf:
                 break
-            buf = conn.recv(BUF_SIZE)
             content += buf
-        data = 
-    
+        print(content)
+        uid = "32" #TODO
+        conn.sendall(uid)
+
     def get_handler(self, conn, addr):
         #handle the get request
         uid = list()
         while 1:
-            if not data: 
+            buf = conn.recv(SocketServerManager.BUF_SIZE)
+            if not buf: 
                 break
-            buf = conn.recv(BUF_SIZE)
             uid += buf
-        data = retrieve(uid)
+        #data = retrieve(uid) #TODO
+        data = "kakapout"
         state = conn.sendall(data)
         if state:
             logging.debug('Data not fully transmitted')
@@ -51,7 +53,7 @@ class SocketServerManager(Process):
         for i in self.servers:
             i.start()
 
-class SocketServer(SocketServer):
+class SocketServer(SocketServerManager):
     SEM_MAX = 30
     
     def __init__(self, callback_method, skt):
@@ -63,18 +65,17 @@ class SocketServer(SocketServer):
         af, socktype, proto, canonname, sa = self.skt
         try:
             s = socket.socket(af, socktype, proto)
-        except socket.error, msg:
+        except socket.error as msg:
             s = None
-            continue
 
         try:
             s.bind(sa)
             s.listen(1)
-        except socket.error, msg:
+        except socket.error as msg:
             #pretty bad
+            print(msg)
             s.close()
             s = None
-            continue
             
         if s is None:
             logging.error("Could not start server, socket cannot be bound")
@@ -89,3 +90,6 @@ class SocketServer(SocketServer):
         while 1:
             conn, addr = s.accept()
             with_sem(s.callback, (conn, addr))
+            
+if __name__ == "__main__":
+    SocketServerManager().start()
