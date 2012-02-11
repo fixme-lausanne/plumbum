@@ -13,7 +13,7 @@ class TestMemoryDB(unittest.TestCase):
     def testSimple(self):
         hai_uid = post('hai')
         print(hai_uid)
-        self.assertEquals('hai', retrieve(hai_uid))
+        self.assertEqual('hai', retrieve(hai_uid))
         self.assertTrue(time.time() - get_creation_timestamp(hai_uid) < 1)
     
     def testNonExistent(self):
