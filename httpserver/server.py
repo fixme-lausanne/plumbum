@@ -3,7 +3,6 @@
 from http.server import *
 from pprint import pprint
 import re
-from ..pastebinlib import db_memory
 
 class RequestHandler(BaseHTTPRequestHandler):
     def do_POST(self):
