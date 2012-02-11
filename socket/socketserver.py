@@ -92,6 +92,7 @@ class SocketServer(SocketServerManager):
         for s in self.skt:
             t = Thread(target=self.bound, args=(s, ))
             threads.append(t)
+            t.start()
         for t in threads:
             t.join()
             
