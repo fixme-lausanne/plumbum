@@ -4,6 +4,7 @@ sys.path.append(dirname(dirname(abspath(__file__))))
 from pastebinlib.db_memory import post, retrieve, get_creation_timestamp, _db
 from pastebinlib.api import NonExistentUID
 
+import logging
 import unittest
 import time
 
@@ -15,7 +16,7 @@ class TestMemoryDB(unittest.TestCase):
         
     def testSimple(self):
         hai_uid = post('hai')
-        print(hai_uid)
+        logging.debug(hai_uid)
         self.assertEqual('hai', retrieve(hai_uid))
         self.assertTrue(time.time() - get_creation_timestamp(hai_uid) < 1)
     

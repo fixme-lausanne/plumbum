@@ -2,6 +2,7 @@ from os.path import dirname, abspath
 import sys
 sys.path.append(dirname(dirname(abspath(__file__))))
 import pastebinlib.db_kyoto as dbk
+import logging
 from pastebinlib.api import NonExistentUID
 
 try:
@@ -22,12 +23,12 @@ except dbk.DataBaseError:
 
 dbk.init()
 uid = dbk.post("test")
-print(dbk.retrieve(uid))
-print(dbk.get_creation_timestamp(uid))
+logging.debug(dbk.retrieve(uid))
+logging.debug(dbk.get_creation_timestamp(uid))
 uid_clash = dbk.post("a", preferred_uid="1")
 uid_clahs1 = dbk.post("b", preferred_uid="1")
-print(dbk.retrieve(uid_clash))
-print(dbk.retrieve(uid_clahs1))
+logging.debug(dbk.retrieve(uid_clash))
+logging.debug(dbk.retrieve(uid_clahs1))
 
 try:
     dbk.post("test", expiry_policy='NO_SUCH_POLICY')
