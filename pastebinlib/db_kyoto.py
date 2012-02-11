@@ -68,11 +68,15 @@ def post(utf8_text,
     entry['expiry_policy'] = expiry_policy
     entry['timeout'] = str(timeout)
     entry['timestamp'] = str(time.time())
-    hash_ = utils.make_uid(utf8_text, expiry_policy, timeout
-            , entry['timestamp'])[:8]
+    if prefered_uid:
+        hash_ = prefered_uid
+    else:
+        hash_ = utils.make_uid(utf8_text, expiry_policy, timeout
+                , entry['timestamp'])[:8]
     jentry = json.dumps(entry)
     write_success = False
     while not write_success:
+#TODO in theory, infinite loops can happen here
         write_success = db.add(hash_, jentry)
         hash_ = utils.refine_uid(hash_)[:8]
     return hash_
