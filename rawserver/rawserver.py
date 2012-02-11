@@ -153,7 +153,7 @@ class SocketServer(Process):
         self.sem.release()
 
 def start():
-    SocketServerManager().run()
+    Thread(target=SocketServerManager().run).start()
 
 if __name__ == "__main__":
     SocketServerManager().run()
