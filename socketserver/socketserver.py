@@ -58,6 +58,8 @@ class SocketServerManager():
     def run(self):
         for s in self.servers:
             s.start()
+        for s in self.servers:
+            s.join()
 
 class SocketServer(Process):
     SEM_MAX = 30
