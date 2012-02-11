@@ -20,4 +20,4 @@ def post(prefered_uid=None):
     
 def run_this_crap(port=8080, host='localhost'):
     dbk.init()
-    run(default_app, host=host, port=port)
+    run(host=host, port=port)
