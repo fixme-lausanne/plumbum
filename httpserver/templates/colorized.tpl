@@ -3,6 +3,6 @@
 <title>Content {{uid}}</title>
 </head>
 <body>
-{{colorized}}
+{{!colorized}}
 </body>
 </html>
