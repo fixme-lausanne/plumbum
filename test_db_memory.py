@@ -26,4 +26,8 @@ class TestMemoryDB(unittest.TestCase):
         a_uid = post('a')
         another_uid = post('a')
         self.assertNotEqual(a_uid, another_uid)
+        
+
+if __name__ == '__main__':
+    unittest.main()
     
