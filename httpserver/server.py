@@ -21,7 +21,7 @@ class RequestHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         header = open('templates/header.tpl', 'r').read()
         footer = open('templates/footer.tpl', 'r').read()
-        reg = re.compile('\/u\/([a-zA-Z0-9]+)')
+        reg = re.compile('[/]u[/]([a-zA-Z0-9]+)')
         m = reg.match(self.path)
         # Show paste
         if m != None:
