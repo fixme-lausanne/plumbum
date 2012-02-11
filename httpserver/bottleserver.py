@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Plumbum http server based on bottle"""
 # Add the parent path of this file to pythonpath, so we can import pastebinlib
-from os.path import dirname, abspath
+from os.path import dirname, abspath, join
 import sys
 import logging
 try:
@@ -20,14 +20,18 @@ except ImportError:
     logging.error('Cannot import kyoto db, falling back to memory db \
 (reason for failure: {})'.format(sys.exc_info()[0]))
     import pastebinlib.db_memory as db
-from httpserver.bottle import route, run, request, abort, template, HTTPResponse, Bottle
+from httpserver.bottle import route, run, request, abort, HTTPResponse, Bottle
+from httpserver.bottle import template as _template
+
+def template(path, base='httpserver/templates', **kwargs):
+    return _template(join(base, path), kwargs)
 
 plubum = Bottle()
 
 @plubum.route('/', method='GET')
 def index():
     """Display the home page"""
-    return template('templates/paste_form')
+    return template('paste_form')
 
 
 @plubum.route('/', method='POST')
@@ -38,7 +42,7 @@ def post():
     uid = db.post(content)
     url = '%s%s' % (request.url, uid)
     if request.forms.get('from_form'):
-        return template('templates/paste_done', url=url)
+        return template('paste_done', url=url)
     else:
         return HTTPResponse(status=201, header={'Location': url})
 
@@ -59,7 +63,7 @@ def retrieve(uid):
         raw_paste = db.retrieve(uid)
         colorized_style = HtmlFormatter().get_style_defs('.highlight')
         colorized_content = highlight(raw_paste, guess_lexer(raw_paste), HtmlFormatter())
-        return template('templates/colorized', uid=uid, colorized_style=colorized_style, colorized_content=colorized_content)
+        return template('colorized', uid=uid, colorized_style=colorized_style, colorized_content=colorized_content)
     except NonExistentUID:
         abort(404, 'No such item "%s"' % uid)
     except NameError:
