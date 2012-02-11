@@ -9,7 +9,7 @@ class RequestHandler(BaseHTTPRequestHandler):
         print('received POST: '+self.path)
 
     def do_GET(self):
-        reg = re.compile('\/u\/([a-zA-Z0-9]+)')
+        reg = re.compile('[/]u[/]([a-zA-Z0-9]+)')
         m = reg.match(self.path)
         # Show paste
         if m != None:

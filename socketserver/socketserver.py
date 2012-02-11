@@ -30,6 +30,7 @@ class SocketServerManager():
         print(content)
         uid = "32" #TODO
         conn.sendall(uid.encode('UTF-8'))
+        conn.close()
 
     def get_handler(self, conn, addr):
         #handle the get request
