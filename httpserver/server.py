@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+
 # Add the parent path of this file to pythonpath, so we can import pastebinlib
 from os.path import dirname, abspath
 import sys
@@ -7,6 +8,7 @@ sys.path.append(dirname(dirname(abspath(__file__))))
 from bottle import route, run, request, abort, template, HTTPResponse
 from pastebinlib.api import NonExistentUID
 import pastebinlib.db_memory as db
+
 
 @route('/', method='GET')
 def index():
