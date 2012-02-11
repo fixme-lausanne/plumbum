@@ -18,6 +18,6 @@ def post(prefered_uid=None):
     uid = dbk.post(content, prefered_uid=prefered_uid)
     return uid
     
-def run_this_crap(port=8080, host='localhost'):
+def run_server(port=8080, host='localhost'):
     dbk.init()
     run(host=host, port=port)
