@@ -24,7 +24,7 @@ def post():
         return HTTPResponse(status=201, header={'Location': url})
 
 
-@route('/<uid>')
+@route('/:uid')
 def retrieve(uid):
     try:
         return db.retrieve(uid)
