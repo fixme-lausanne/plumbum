@@ -1,4 +1,4 @@
-import db_kyoto as dbk
+import pastebinlib.db_kyoto as dbk
 
 try:
     dbk.post("test")
