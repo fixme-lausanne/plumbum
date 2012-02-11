@@ -13,10 +13,15 @@ def welcome():
 
 @app.route('/<uid>', methods=['GET'])
 def show_entry(uid):
-    code = dbk.retrieve(uid)
-    lexer = get_lexer_by_name("python", stripall=True)
-    formatter = HtmlFormatter(full=True, style='colorful')
-    return highlight(code, lexer, formatter)
+    print uid
+    try:
+        code = dbk.retrieve(uid)
+    except dbk.DataBaseError:
+        return "Error uid: %s not found." % uid
+    else:
+        lexer = get_lexer_by_name("python", stripall=True)
+        formatter = HtmlFormatter(full=True, style='colorful')
+        return highlight(code, lexer, formatter)
 
 @app.route('/', methods=['POST'])
 def add_entry():
@@ -27,4 +32,4 @@ def add_entry():
 if __name__ == "__main__":
     dbk.init()
     app.run()
-    dbk.close()
+    dbk.bye()
