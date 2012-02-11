@@ -5,34 +5,34 @@ import pastebinlib.db_kyoto as dbk
 import logging
 from pastebinlib.api import NonExistentUID
 
-try:
-    dbk.post("test")
-except dbk.DataBaseError:
-    pass
+import unittest
+import logging
 
-try:
-    dbk.retrieve("ee229238")
-except NonExistentUID:
-    pass
+class Test(unittest.TestCase):
+    def test_wrong_post()
+        self.assertRaises(dbk.DataBaseError, dbk.post("test")
 
-try:
-    dbk.bye()
-except dbk.DataBaseError:
-    pass
+    def test_wrong_retrieve():
+        self.assertRaises(NonExistentUID, dbk.retrieve("ee229238"))
 
+    def test_wrong_close():
+        self.assertRaises(dbk.DataBaseError, dbk.bye()
+    
+    def test_wrong_policy():
+        dbk.init()
+        self.assertRaises(ValueError, dbk.post("test", expiry_policy='NO_SUCH_POLICY'))
+        dbk.bye()
 
-dbk.init()
-uid = dbk.post("test")
-logging.debug(dbk.retrieve(uid))
-logging.debug(dbk.get_creation_timestamp(uid))
-uid_clash = dbk.post("a", preferred_uid="1")
-uid_clahs1 = dbk.post("b", preferred_uid="1")
-logging.debug(dbk.retrieve(uid_clash))
-logging.debug(dbk.retrieve(uid_clahs1))
+    def test_gen_behavious():
+        dbk.init()
+        uid = dbk.post("test")
+        logging.debug(dbk.retrieve(uid))
+        logging.debug(dbk.get_creation_timestamp(uid))
+        uid_clash = dbk.post("a", preferred_uid="1")
+        uid_clahs1 = dbk.post("b", preferred_uid="1")
+        logging.debug(dbk.retrieve(uid_clash))
+        logging.debug(dbk.retrieve(uid_clahs1))
 
-try:
-    dbk.post("test", expiry_policy='NO_SUCH_POLICY')
-except ValueError:
-    pass
-
-dbk.bye()
+if __name__ == '__main__':
+    unittest.main()
+    
