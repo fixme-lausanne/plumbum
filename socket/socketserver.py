@@ -59,7 +59,7 @@ class SocketServerManager(Process):
         for s in self.servers:
             s.join()
 
-class SocketServer(SocketServerManager):
+class SocketServer(Process):
     SEM_MAX = 30
 
     def __init__(self, callback_method, skt):
