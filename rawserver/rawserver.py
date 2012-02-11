@@ -47,7 +47,7 @@ self.post_handler)
         content = list()
         while 1:
             buf = conn.recv(SocketServerManager.BUF_SIZE)
-            if buf == b'\xff\xec':
+            if buf == b'\xff\xec' or buf == b'\x0a':
                 break
             content += buf
         uid = db.post("".join(map(str, content)))
