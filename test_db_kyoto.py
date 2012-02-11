@@ -1,4 +1,5 @@
 import pastebinlib.db_kyoto as dbk
+from pastebinlib.api import NonExistentUID
 
 try:
     dbk.post("test")
@@ -7,7 +8,7 @@ except dbk.DataBaseError:
 
 try:
     dbk.retrieve("ee229238")
-except dbk.DataBaseError:
+except NonExistentUID:
     pass
 
 try:
@@ -18,11 +19,10 @@ except dbk.DataBaseError:
 
 dbk.init()
 uid = dbk.post("test")
-print(dbk.retrieve_json(uid))
 print(dbk.retrieve(uid))
 print(dbk.get_creation_timestamp(uid))
-uid_clash = dbk.post("a", prefered_uid="1")
-uid_clahs1 = dbk.post("b", prefered_uid="1")
+uid_clash = dbk.post("a", preferred_uid="1")
+uid_clahs1 = dbk.post("b", preferred_uid="1")
 print(dbk.retrieve(uid_clash))
 print(dbk.retrieve(uid_clahs1))
 
