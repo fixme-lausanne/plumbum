@@ -66,7 +66,8 @@ def retrieve(uid):
         return raw_retrieve(uid)
 
 def start(host='0.0.0.0', port=8080):
+    logging.debug("Launching the bottleServer")
     run(plubum, host, port)
 
 if __name__ == '__main__':
-    run(plubum, host='0.0.0.0', port=8080, debug=True, reloader=True)
+    run(plubum, host='localhost', port=8080, debug=True, reloader=True)
