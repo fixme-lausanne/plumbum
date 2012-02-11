@@ -88,8 +88,8 @@ class SocketServer(Process):
 
         while 1:
             print("CONNECTION")
-            conn, addr = s.accept()
-            t = Thread(target=self.with_sem, args=(self.callback, (conn, addr)))
+            acc = s.accept()
+            t = Thread(target=self.with_sem, args=(self.callback, acc))
             t.run()
 
     def run(self):
@@ -101,9 +101,9 @@ class SocketServer(Process):
         for t in threads:
             t.join()
 
-    def with_sem(self, f, *args):
+    def with_sem(self, f, arg):
         self.sem.acquire()
-        f(args)
+        f(arg[0], arg[1])
         self.sem.release()
 
 if __name__ == "__main__":
