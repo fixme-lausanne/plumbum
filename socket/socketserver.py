@@ -64,6 +64,7 @@ class SocketServer(Process):
 
     def __init__(self, callback_method, skt):
         Process.__init__(self)
+        self.callback = callback_method
         self.skt = skt
         self.sem = Semaphore(SocketServer.SEM_MAX)
 
