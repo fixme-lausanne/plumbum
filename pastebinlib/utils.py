@@ -2,10 +2,9 @@ import hashlib
 import random
 import string
 
-
-def make_uid(content):
-    return hashlib.md5(content).hexdigest()
-
+def make_uid(utf8_text, expiry_policy, timeout, prefered_uid, timestamp):
+    spec = ''.join((utf8_text, str(expiry_policy), str(timeout), str(timestamp)))
+    return hashlib.sha1(spec.encode('utf-8')).hexdigest()
 
 def refine_uid(uid):
     return str(uid) + random.choice(string.letters + string.digits)
