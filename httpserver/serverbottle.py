@@ -4,10 +4,14 @@
 from os.path import dirname, abspath
 import sys
 import logging
-from pygments import highlight
-from pygments.lexers import PythonLexer
-from pygments.formatters import HtmlFormatter
-
+try:
+    from pygments import highlight
+    from pygments.lexers import PythonLexer
+    from pygments.formatters import HtmlFormatter
+except ImportError:
+    logging.error('Cannot import pygments lib, will not provide \
+coloration')
+    
 sys.path.append(dirname(dirname(abspath(__file__))))
 from pastebinlib.api import NonExistentUID
 try:
@@ -57,4 +61,8 @@ def retrieve(uid):
         abort(404, 'No such item "%s"' % uid)
 
 if __name__ == '__main__':
-    run(host='0.0.0.0', port=8080, debug=True)
+    debug = True
+    if debug:
+        run(host='0.0.0.0', port=8080, debug=True, reloader=True)
+    else:
+        run(host='0.0.0.0', port=8080)
