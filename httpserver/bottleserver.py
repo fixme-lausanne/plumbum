@@ -20,7 +20,7 @@ except ImportError:
     logging.error('Cannot import kyoto db, falling back to memory db \
 (reason for failure: {})'.format(sys.exc_info()[0]))
     import pastebinlib.db_memory as db
-from bottle import route, run, request, abort, template, HTTPResponse
+from httpserver.bottle import route, run, request, abort, template, HTTPResponse
 
 
 @route('/', method='GET')
