@@ -2,6 +2,7 @@ import socket
 from multiprocessing import Process
 from threading import Semaphore, Thread
 import logging
+from pastebinlib import db_kyoto as dbk
 
 
 class SocketServerManager():
@@ -17,6 +18,7 @@ class SocketServerManager():
         self.servers.append(post_serv)
         get_serv = self.socket_server_factory(self.host, self.get_port, self.post_handler)
         self.servers.append(get_serv)
+        dbk.init()
 
 
     def post_handler(self, conn, addr):
@@ -24,12 +26,12 @@ class SocketServerManager():
         content = list()
         while 1:
             buf = conn.recv(SocketServerManager.BUF_SIZE)
-            if not buf:
+            if buf == b'\xff\xec':
                 break
             content += buf
-        print(content)
-        uid = "32" #TODO
-        conn.sendall(uid.encode('UTF-8'))
+        uid = dbk.post("".join(map(str, content)))
+        print(uid)
+        conn.sendall((uid + "\r\n").encode('UTF-8'))
         conn.close()
 
     def get_handler(self, conn, addr):
@@ -40,8 +42,10 @@ class SocketServerManager():
             if not buf:
                 break
             uid += buf
-        #data = retrieve(uid) #TODO
-        data = "kakapout"
+        try:
+            data = dbk.retrieve(uid)
+        except dbk.DataBaseError:
+            data = "Uid %s not found" % uid
         state = conn.sendall(data.encode("UTF-8"))
         if state:
             logging.debug('Data not fully transmitted')
@@ -53,6 +57,7 @@ class SocketServerManager():
     def socket_server_factory(self, host, port, callback):
         s = socket.getaddrinfo(host, port)
         server = SocketServer(callback, s)
+        server.daemon = True
         return server
 
     def run(self):
@@ -83,9 +88,13 @@ class SocketServer(Process):
             s.listen(1)
         except socket.error as msg:
             #pretty bad
-            logging.error(msg)
+            print(msg)
             s.close()
-            return 
+            s = None
+
+        if s is None:
+            logging.error("Could not start server, socket cannot be bound")
+            return
 
         while 1:
             print("CONNECTION")

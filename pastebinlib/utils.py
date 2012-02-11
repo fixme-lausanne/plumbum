@@ -7,4 +7,4 @@ def make_uid(utf8_text, expiry_policy, timeout, prefered_uid, timestamp):
     return hashlib.sha1(spec.encode('utf-8')).hexdigest()
 
 def refine_uid(uid):
-    return str(uid) + random.choice(string.letters + string.digits)
+    return str(uid) + random.choice(string.ascii_letters + string.digits)
