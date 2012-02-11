@@ -2,8 +2,8 @@ import time
 import json
 from hashlib import sha1
 import kyotocabinet as kc
-import pastebinlib.api as api
-import pastebinlib.utils as utils
+import database.api as api
+import database.utils as utils
 
 """ Interact with Kyoto Cabinet
 

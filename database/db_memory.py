@@ -1,7 +1,7 @@
 from collections import namedtuple
 from threading import Lock
-import pastebinlib.api as api
-import pastebinlib.utils as utils
+import database.api as api
+import database.utils as utils
 import time
 
 _db = {}

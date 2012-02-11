@@ -5,19 +5,19 @@ from multiprocessing import Process
 from threading import Semaphore, Thread
 import logging
 
-# Add the parent path of this file to pythonpath, so we can import pastebinlib
+# Add the parent path of this file to pythonpath, so we can import database
 from os.path import dirname, abspath
 import sys
 sys.path.append(dirname(dirname(abspath(__file__))))
 
 try:
-    import pastebinlib.db_kyoto as db
+    import database.db_kyoto as db
 except:
     print('Cannot import kyoto db, falling back to memory db \
 (reason for failure: %s)' % sys.exc_info()[0])
-    import pastebinlib.db_memory as db
+    import database.db_memory as db
 
-from pastebinlib.api import NonExistentUID
+from database.api import NonExistentUID
 
 
 class SocketServerManager(Thread):
