@@ -6,7 +6,7 @@ import sys
 import logging
 try:
     from pygments import highlight
-    from pygments.lexers import PythonLexer
+    from pygments.lexers import guess_lexer
     from pygments.formatters import HtmlFormatter
 except ImportError:
     logging.error('Cannot import pygments lib, will not provide \
@@ -57,7 +57,7 @@ def retrieve(uid):
     try:
         raw_paste = db.retrieve(uid)
         colorized_style = HtmlFormatter().get_style_defs('.highlight')
-        colorized_content = highlight(raw_paste, PythonLexer(), HtmlFormatter())
+        colorized_content = highlight(raw_paste, guess_lexer(raw_paste), HtmlFormatter())
         return template('templates/colorized', uid=uid, colorized_style=colorized_style, colorized_content=colorized_content)
     except NonExistentUID:
         abort(404, 'No such item "%s"' % uid)
