@@ -4,7 +4,7 @@ from pastebinlib.api import NonExistentUID
 
 app = Bottle()
 
-@app.route('/<uid>', method='GET')
+@route('/<uid>', method='GET')
 def retrieve(uid=None):
     if not uid:
         return index()
@@ -14,7 +14,7 @@ def retrieve(uid=None):
         return index()
     return content
     
-@app.route('/', method='POST')
+@route('/', method='POST')
 def post(prefered_uid=None):
     content = request.forms.get('lead')
     uid = dbk.post(content, prefered_uid=prefered_uid)
