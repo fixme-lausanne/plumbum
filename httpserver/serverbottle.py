@@ -1,17 +1,15 @@
-from bottle import route, run, request, Bottle
+from bottle import route, run, request, default_app
 import pastebinlib.db_kyoto as dbk
 from pastebinlib.api import NonExistentUID
-
-app = Bottle()
 
 @route('/<uid>', method='GET')
 def retrieve(uid=None):
     if not uid:
-        return index()
+        return "Nope"
     try:
         content = dbk.retrieve(uid)
     except NonExistentUID:
-        return index()
+        return "Nope"
     return content
     
 @route('/', method='POST')
@@ -22,4 +20,4 @@ def post(prefered_uid=None):
     
 def run_this_crap(port=8080, host='localhost'):
     dbk.init()
-    run(app, host=host, port=port)
+    run(default_app, host=host, port=port)
