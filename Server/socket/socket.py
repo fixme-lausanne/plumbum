@@ -60,7 +60,7 @@ class SocketServer(SocketServer):
         self.sem = Semaphore(SocketServer.SEM_MAX)
 
     def run(self):
-        af, socktype, proto, canonname, sa = self.res
+        af, socktype, proto, canonname, sa = self.skt
         try:
             s = socket.socket(af, socktype, proto)
         except socket.error, msg:
@@ -77,7 +77,7 @@ class SocketServer(SocketServer):
             continue
             
         if s is None:
-            logging.error("Could not open socket")
+            logging.error("Could not start server, socket cannot be bound")
             return
             
         @staticmethod
