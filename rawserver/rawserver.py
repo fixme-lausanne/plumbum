@@ -51,8 +51,10 @@ self.post_handler)
                 break
             content += buf
         uid = db.post("".join(map(str, content)))
-        print(uid)
-        conn.sendall((uid + "\r\n").encode('UTF-8'))
+        state = conn.sendall((uid + "\r\n").encode('UTF-8'))
+        if state:
+            logging.debug('Data not fully transmitted')
+            logging.warning('The data sent have not been transmitted properly')
         conn.close()
 
     def get_handler(self, conn, addr):
@@ -72,8 +74,7 @@ self.post_handler)
         state = conn.sendall(data.encode("UTF-8"))
         if state:
             logging.debug('Data not fully transmitted')
-            logging.info('The data sent have not been transmitted properly')
-            logging.warning('Transmission error')
+            logging.warning('The data sent have not been transmitted properly')
         conn.close()
         print('Data retrieved')
 
