@@ -1,8 +1,8 @@
 from socket import socket
-
+import logging
 
 class SocketServerManager(Process):
-
+    BUF_SIZE = 1024
     def __init__(self, post_port=1338, get_port=1339, host=None):
         self = Process.__init__(self)
         self.servers = []
@@ -17,18 +17,26 @@ class SocketServerManager(Process):
             
     def post_handler(self, conn, addr):
         #handle the post request
-        
+        content = list()
+        while 1:
+            if not data:
+                break
+            buf = conn.recv(BUF_SIZE)
+            content += buf
+        data = 
+    
     def get_handler(self, conn, addr):
         #handle the get request
         uid = list()
         while 1:
-            if not data: break
-            buf = conn.recv(1024)
+            if not data: 
+                break
+            buf = conn.recv(BUF_SIZE)
             uid += buf
         data = retrieve(uid)
         state = conn.sendall(data)
-        if state:
-        conn.close()
+        if state: 
+            conn.close()
         print 'Data retrieved'
             
     @staticmethod
@@ -66,7 +74,7 @@ class SocketServer(SocketServer):
             continue
             
         if s is None:
-            print("Could not open socket")
+            logging.error("Could not open socket")
             return
             
         @staticmethod
