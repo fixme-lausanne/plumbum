@@ -28,7 +28,7 @@ def index():
 def post():
     """Post a new pastebin"""
     content = request.forms.get('content')
-    preferred_uid = request.forms.get('')
+    #preferred_uid = request.forms.get('')
     uid = db.post(content)
     url = '%s%s' % (request.url, uid)
     if request.forms.get('from_form'):
@@ -37,7 +37,7 @@ def post():
         return HTTPResponse(status=201, header={'Location': url})
 
 
-@route('/:uid', method='GET')
+@route('/:uid/raw', method='GET')
 def retrieve(uid):
     try:
         return db.retrieve(uid)
@@ -45,11 +45,11 @@ def retrieve(uid):
         abort(404, 'No such item "%s"' % uid)
 
 
-@route('/:uid/color', method='GET')
+@route('/:uid', method='GET')
 def retrieve_color(uid):
     try:
         raw_paste = db.retrieve(uid)
-        return highlight(code, PythonLexer(), HtmlFormatter())
+        return highlight(raw_paste, PythonLexer(), HtmlFormatter())
     except NonExistentUID:
         abort(404, 'No such item "%s"' % uid)
 
