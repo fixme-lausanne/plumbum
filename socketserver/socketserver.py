@@ -111,4 +111,4 @@ class SocketServer(Process):
         self.sem.release()
 
 if __name__ == "__main__":
-    SocketServerManager().run()
+    SocketServerManager().start()
