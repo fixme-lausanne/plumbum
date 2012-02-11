@@ -1,6 +1,8 @@
 EXPIRY_NEVER = 1
-EXPIRY_FROM_READ = 2
-EXPIRY_FROM_WRITE = 3
+EXPIRY_WEEK_FROM_READ = 2
+EXPIRY_WEEK_FROM_WRITE = 3
+EXPIRY_YEAR_FROM_READ = 4
+EXPIRY_YEAR_FROM_WRITE = 5
 
 
 class NonExistentUID(Exception):
@@ -11,7 +13,7 @@ class NonExistentUID(Exception):
         return repr(self.uid)
 
 
-def post(utf8_text, expiry_policy=EXPIRY_NEVER, timeout=0, prefered_uid=None, 
+def post(utf8_text, expiry_policy=EXPIRY_NEVER, prefered_uid=None,
          linked_uid_list=None):
     pass
 
