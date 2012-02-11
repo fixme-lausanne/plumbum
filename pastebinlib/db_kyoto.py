@@ -2,6 +2,7 @@ import time
 import json
 from hashlib import sha1
 import kyotocabinet as kc
+import pastebinlib.utils as utils
 
 """ Interact with Kyoto Cabinet
 
@@ -67,9 +68,13 @@ def post(utf8_text,
     entry['expiry_policy'] = expiry_policy
     entry['timeout'] = str(timeout)
     entry['timestamp'] = str(time.time())
-    hash_ = sha1(("".join(entry.values())).encode("utf-8")).hexdigest()[:8]
+    hash_ = utils.make_uid(utf8_text, expiry_policy, timeout
+            , entry['timestamp'])[:8]
     jentry = json.dumps(entry)
-    db.set(hash_, jentry)
+    write_success = False
+    while not write_success:
+        write_success = db.add(hash_, jentry)
+        hash_ = utils.refine_uid(hash_)[:8]
     return hash_
 
 def retrieve_json(uid):
