@@ -35,9 +35,12 @@ class SocketServerManager(Process):
             uid += buf
         data = retrieve(uid)
         state = conn.sendall(data)
-        if state: 
-            conn.close()
-        print 'Data retrieved'
+        if state:
+            logging.debug('Data not fully transmitted')
+            logging.info('The data sent have not been transmitted properly')
+            logging.warning('Transmission error')
+        conn.close()
+        print('Data retrieved')
             
     @staticmethod
     def socket_server_factory(host, port, callback):

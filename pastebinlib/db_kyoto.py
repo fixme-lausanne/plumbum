@@ -51,7 +51,7 @@ def bye():
     db = None
 
 def check_db():
-    if not db:
+    if db == None:
         raise DataBaseError("database not open ")
 
 def post(utf8_text,
