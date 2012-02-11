@@ -88,10 +88,13 @@ class SocketServer(SocketServerManager):
             Thread(target=self.with_sem, args=(s.callback, (conn, addr)))
             
     def run(self):
-        for s in self.skt[:-2]:
-            Thread(target=self.bound, args=(s, )).start()
-        Thread(target=self.bound, args=(self.skt[-1], )).run()
-        
+        threads = []
+        for s in self.skt:
+            t = Thread(target=self.bound, args=(s, ))
+            threads.append(t)
+        for t in threads:
+            t.join()
+            
     def with_sem(self, f, *args):
         self.sem.acquire()
         f(args)
