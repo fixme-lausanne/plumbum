@@ -1,8 +1,8 @@
 from os.path import dirname, abspath
 import sys
 sys.path.append(dirname(dirname(abspath(__file__))))
-from pastebinlib.db_memory import post, retrieve, get_creation_timestamp, _db
-from pastebinlib.api import NonExistentUID
+from database.db_memory import post, retrieve, get_creation_timestamp, _db
+from database.api import NonExistentUID
 
 import logging
 import unittest
