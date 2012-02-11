@@ -1,4 +1,4 @@
-from bottle import route, run, request
+from bottle import route, run, request, Bottle
 import pastebinlib.db_kyoto as dbk
 from pastebinlib.api import NonExistentUID
 
