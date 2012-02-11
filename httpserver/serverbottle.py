@@ -1,6 +1,6 @@
 from bottle import route, run, request
 import pastebinlib.db_kyoto as dbk
-import pastebinlib.api.NonExistentUID as NonExistentUID 
+from pastebinlib.api import NonExistentUID
 
 @route('/')
 def index():
