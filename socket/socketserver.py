@@ -9,11 +9,11 @@ class SocketServerManager(Process):
     
     def __init__(self, post_port=1338, get_port=1339, host=None):
         Process.__init__(self)
+        self.post_port = post_port
+        self.get_port = get_port
+        self.host = host
         self.servers = []
-        post_serv = self.socket_server_factory(host, post_port, self.get_handler)
-        self.servers.append(post_serv)
-        get_serv = self.socket_server_factory(host, get_port, self.post_handler)
-        self.servers.append(get_serv)
+
 
     def post_handler(self, conn, addr):
         #handle the post request
@@ -50,6 +50,10 @@ class SocketServerManager(Process):
         return SocketServer(callback, s)
 
     def run(self):
+        post_serv = self.socket_server_factory(self.host, self.post_port, self.get_handler)
+        self.servers.append(post_serv)
+        get_serv = self.socket_server_factory(self.host, self.get_port, self.post_handler)
+        self.servers.append(get_serv)
         for s in self.servers:
             s.start()
         for s in self.servers:
