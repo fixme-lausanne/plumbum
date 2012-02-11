@@ -23,7 +23,7 @@ def post(prefered_uid=None):
     uid = dbk.post(content, prefered_uid=prefered_uid)
     return uid
     
-if __name__ == "__main__":
+def run_server(port=8000):
     if len(sys.argv):
         dbk.init()
-        run(port=8080)
+        run(port)
