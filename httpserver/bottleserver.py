@@ -64,9 +64,8 @@ def retrieve(uid):
     except NameError:
         return raw_retrieve(uid)
 
+def start(host=='0.0.0.0', port=8080):
+    run(host, port)
+
 if __name__ == '__main__':
-    debug = True
-    if debug:
-        run(host='0.0.0.0', port=8080, debug=True, reloader=True)
-    else:
-        run(host='0.0.0.0', port=8080)
+    run(host='0.0.0.0', port=8080, debug=True, reloader=True)
