@@ -56,8 +56,9 @@ def retrieve(uid):
     """Fetch a pastebin entry with coloration using Pygments lib"""
     try:
         raw_paste = db.retrieve(uid)
-        colorized = highlight(raw_paste, PythonLexer(), HtmlFormatter())
-        return template('templates/colorized', uid=uid, colorized=colorized)
+        colorized_style = HtmlFormatter().get_style_defs('.highlight')
+        colorized_content = highlight(raw_paste, PythonLexer(), HtmlFormatter())
+        return template('templates/colorized', uid=uid, colorized_style=colorized_style, colorized_content=colorized_content)
     except NonExistentUID:
         abort(404, 'No such item "%s"' % uid)
 
