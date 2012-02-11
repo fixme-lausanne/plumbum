@@ -1,8 +1,22 @@
+#!/usr/bin/env python3
+
 import socket
 from multiprocessing import Process
 from threading import Semaphore, Thread
 import logging
-from pastebinlib import db_kyoto as dbk
+
+# Add the parent path of this file to pythonpath, so we can import pastebinlib
+from os.path import dirname, abspath
+import sys
+sys.path.append(dirname(dirname(abspath(__file__))))
+
+try: 
+    import pastebinlib.db_kyoto as db
+except:
+    print('Cannot import kyoto db, falling back to memory db (reason for failure: %s)' % sys.exc_info()[0] )
+    import pastebinlib.db_memory as db
+    
+from pastebinlib.api import NonExistentUID
 
 
 class SocketServerManager():
@@ -18,7 +32,6 @@ class SocketServerManager():
         self.servers.append(post_serv)
         get_serv = self.socket_server_factory(self.host, self.get_port, self.post_handler)
         self.servers.append(get_serv)
-        dbk.init()
 
 
     def post_handler(self, conn, addr):
@@ -29,7 +42,7 @@ class SocketServerManager():
             if buf == b'\xff\xec':
                 break
             content += buf
-        uid = dbk.post("".join(map(str, content)))
+        uid = db.post("".join(map(str, content)))
         print(uid)
         conn.sendall((uid + "\r\n").encode('UTF-8'))
         conn.close()
@@ -43,8 +56,8 @@ class SocketServerManager():
                 break
             uid += buf
         try:
-            data = dbk.retrieve(uid)
-        except dbk.DataBaseError:
+            data = db.retrieve(uid)
+        except NonExistentUID:
             data = "Uid %s not found" % uid
         state = conn.sendall(data.encode("UTF-8"))
         if state:
@@ -76,7 +89,7 @@ class SocketServer(Process):
         self.sem = Semaphore(SocketServer.SEM_MAX)
 
     def bound(self, s):
-        af, socktype, proto, canonname, sa = s
+        af, socktype, proto, _canonname, sa = s
         print(s)
         try:
             s = socket.socket(af, socktype, proto)
@@ -115,6 +128,7 @@ class SocketServer(Process):
         self.sem.acquire()
         f(arg[0], arg[1])
         self.sem.release()
+
 
 if __name__ == "__main__":
     SocketServerManager().run()
