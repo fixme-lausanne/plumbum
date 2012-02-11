@@ -52,7 +52,6 @@ class SocketServerManager():
     def socket_server_factory(self, host, port, callback):
         s = socket.getaddrinfo(host, port)
         server = SocketServer(callback, s)
-        server.daemon = True
         return server
 
     def run(self):
@@ -83,13 +82,9 @@ class SocketServer(Process):
             s.listen(1)
         except socket.error as msg:
             #pretty bad
-            print(msg)
+            logging.error(msg)
             s.close()
-            s = None
-
-        if s is None:
-            logging.error("Could not start server, socket cannot be bound")
-            return
+            return 
 
         while 1:
             print("CONNECTION")
