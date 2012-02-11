@@ -1,3 +1,6 @@
+from os.path import dirname, abspath
+import sys
+sys.path.append(dirname(dirname(abspath(__file__))))
 import pastebinlib.db_kyoto as dbk
 from pastebinlib.api import NonExistentUID
 
