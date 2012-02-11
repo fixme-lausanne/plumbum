@@ -23,7 +23,7 @@ speredenn <jbc@gmx.se>
 
 ## Installation
 
-Bottle is provided with the framework. Pygemnts and Kyoto are optional. If
+Bottle is provided with the framework. Pygments and Kyoto are optional. If
 Pygments can not be found, no coloring is provided. If Kyoto can not be found a
 simple in-memory dictionary is used for storage.
 
