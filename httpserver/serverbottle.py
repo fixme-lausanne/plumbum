@@ -24,6 +24,5 @@ def post(prefered_uid=None):
     return uid
     
 def run_server(port=8000):
-    if len(sys.argv):
-        dbk.init()
-        run(port)
+    dbk.init()
+    run(port)
