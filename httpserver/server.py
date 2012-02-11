@@ -2,6 +2,7 @@
 
 from http.server import *
 from pprint import pprint
+import logging
 import re
 
 class RequestHandler(BaseHTTPRequestHandler):
@@ -12,7 +13,7 @@ class RequestHandler(BaseHTTPRequestHandler):
         footer = open('templates/footer.tpl', 'r').read()
         length = int(self.headers.get('content-length'))
         post = self.rfile.read(length)
-        print('post this to the db %s'%post)
+        logging.debug('post this to the db %s'%post)
         self.send_response(200)
         self.send_header('Content-type', 'text/html')
         self.end_headers()
@@ -26,7 +27,7 @@ class RequestHandler(BaseHTTPRequestHandler):
         # Show paste
         if m != None:
             paste = 'Stuff from the database'
-            data   = open('templates/show.tpl', 'r').read().replace('{{data}}', paste)
+            data = open('templates/show.tpl', 'r').read().replace('{{data}}', paste)
             self.send_response(200)
             self.send_header('Content-type', 'text/html')
             self.end_headers()
