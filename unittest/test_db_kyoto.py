@@ -6,7 +6,6 @@ import logging
 from database.api import NonExistentUID
 
 import unittest
-import logging
 
 class Test(unittest.TestCase):
 

@@ -13,7 +13,7 @@ sys.path.append(dirname(dirname(abspath(__file__))))
 try:
     import database.db_kyoto as db
 except:
-    print('Cannot import kyoto db, falling back to memory db \
+    logging.error('Cannot import kyoto db, falling back to memory db \
 (reason for failure: %s)' % sys.exc_info()[0])
     import database.db_memory as db
 
@@ -77,7 +77,7 @@ self.post_handler)
             logging.debug('Data not fully transmitted')
             logging.warning('The data sent have not been transmitted properly')
         conn.close()
-        print('Data retrieved')
+        logging.debug('Data retrieved')
 
     def socket_server_factory(self, host, port, callback):
         """create a new SocketServer instance bound on the port port and
@@ -89,11 +89,14 @@ self.post_handler)
 
     def run(self):
         """start the servers and wait for them to be stopped"""
-        for s in self.servers:
-            s.start()
-        for s in self.servers:
-            s.join()
-
+        try:
+            for s in self.servers:
+                s.start()
+            for s in self.servers:
+                s.join()
+        except KeyboardInterrupt:
+            for s in self.servers:
+                s.close()
 
 class SocketServer(Process):
     """A simple telnet server with a callback"""
@@ -131,7 +134,7 @@ class SocketServer(Process):
             return
 
         while 1:
-            print("CONNECTION")
+            logging.info("Connexion done")
             acc = s.accept()
             t = Thread(target=self.with_sem, args=(self.callback, acc))
             t.run()
@@ -152,7 +155,7 @@ class SocketServer(Process):
         self.sem.acquire()
         fs(arg[0], arg[1])
         self.sem.release()
-
+    
 def start():
     SocketServerManager().start()
     

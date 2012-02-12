@@ -1,6 +1,5 @@
 import time
 import json
-from hashlib import sha1
 import kyotocabinet as kc
 import database.api as api
 import database.utils as utils
