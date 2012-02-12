@@ -9,7 +9,8 @@ import unittest
 import logging
 
 class Test(unittest.TestCase):
-    def test_wrong_post(self)
+
+    def test_wrong_post(self):
         self.assertRaises(dbk.DataBaseError, dbk.post("test"))
 
     def test_wrong_retrieve(self):
