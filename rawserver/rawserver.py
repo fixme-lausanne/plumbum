@@ -10,15 +10,7 @@ from os.path import dirname, abspath
 import sys
 sys.path.append(dirname(dirname(abspath(__file__))))
 
-try:
-    import database.db_kyoto as db
-except:
-    logging.error('Cannot import kyoto db, falling back to memory db \
-(reason for failure: %s)' % sys.exc_info()[0])
-    import database.db_memory as db
-
-from database.api import NonExistentUID
-
+import database as db
 
 class SocketServerManager(Thread):
     """Class that create the socket servers and assign callback to them"""
@@ -70,7 +62,7 @@ self.post_handler)
             uid += buf
         try:
             data = db.retrieve(uid)
-        except NonExistentUID:
+        except db.NonExistentUID:
             data = "Uid %s not found" % uid
         state = conn.sendall(data.encode("UTF-8"))
         if state:
