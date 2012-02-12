@@ -9,14 +9,14 @@ import unittest
 import logging
 
 class Test(unittest.TestCase):
-    def test_wrong_post(self)
-        self.assertRaises(dbk.DataBaseError, dbk.post("test")
+    def test_wrong_post(self):
+        self.assertRaises(dbk.DataBaseError, dbk.post("test"))
 
     def test_wrong_retrieve(self):
         self.assertRaises(NonExistentUID, dbk.retrieve("ee229238"))
 
     def test_wrong_close(self):
-        self.assertRaises(dbk.DataBaseError, dbk.bye()
+        self.assertRaises(dbk.DataBaseError, dbk.bye())
     
     def test_wrong_policy(self):
         dbk.init()
