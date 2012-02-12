@@ -75,8 +75,7 @@ def get_linked(uid):
 
 def bye():
     global db
-    _check_db()
-    if not db.close():
+    if db !=None and not db.close():
         raise DataBaseError("close error: " + str(db.error()))
     db = None
 

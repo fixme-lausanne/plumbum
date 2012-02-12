@@ -9,18 +9,12 @@ import unittest
 
 class Test(unittest.TestCase):
 
-    def test_wrong_post(self):
-        self.assertRaises(dbk.DataBaseError, dbk.post("test"))
-
     def test_wrong_retrieve(self):
-        self.assertRaises(NonExistentUID, dbk.retrieve("ee229238"))
-
-    def test_wrong_close(self):
-        self.assertRaises(dbk.DataBaseError, dbk.bye())
+        self.assertRaises(NonExistentUID, dbk.retrieve, "ee229238")
 
     def test_wrong_policy(self):
         dbk.init()
-        self.assertRaises(ValueError, dbk.post("test", expiry_policy='NO_SUCH_POLICY'))
+        self.assertRaises(ValueError, dbk.post, "test", expiry_policy='NO_SUCH_POLICY')
         dbk.bye()
 
     def test_gen_behavious(self):
