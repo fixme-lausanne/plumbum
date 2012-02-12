@@ -2,6 +2,8 @@
 """Plumbum http server based on bottle"""
 from os.path import dirname, abspath, join
 import sys
+sys.path.append(dirname(dirname(abspath(__file__))))
+
 import logging
 try:
     from pygments import highlight
@@ -11,10 +13,10 @@ except ImportError:
     logging.error('Cannot import pygments lib, will not provide \
 coloration')
 import database as db
-from httpserver.bottle import run, request, abort, HTTPResponse, Bottle
-from httpserver.bottle import template as _template
+from bottle import run, request, abort, HTTPResponse, Bottle
+from bottle import template as _template
 
-def template(path, base='httpserver/templates', **kwargs):
+def template(path, base='templates', **kwargs):
     return _template(join(base, path), kwargs)
 
 plubum = Bottle()
