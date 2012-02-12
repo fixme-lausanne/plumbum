@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 """Plumbum http server based on bottle"""
-# Add the parent path of this file to pythonpath, so we can import database
 from os.path import dirname, abspath, join
 import sys
 import logging
@@ -12,7 +11,6 @@ except ImportError:
     logging.error('Cannot import pygments lib, will not provide \
 coloration')
 import database as db
-sys.path.append(dirname(dirname(abspath(__file__))))
 from httpserver.bottle import run, request, abort, HTTPResponse, Bottle
 from database.api import NonExistentUID
 from httpserver.bottle import template as _template
