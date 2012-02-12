@@ -1,8 +1,8 @@
 from os.path import dirname, abspath
 import sys
 sys.path.append(dirname(dirname(abspath(__file__))))
-from pastebinlib.db_memory import post, retrieve, get_creation_timestamp, _db
-from pastebinlib.api import NonExistentUID
+from database.db_memory import post, retrieve, get_creation_timestamp, _db
+from database.api import NonExistentUID
 
 import logging
 import unittest
@@ -13,13 +13,13 @@ class TestMemoryDB(unittest.TestCase):
 
     def setUp(self):
         _db.clear()
-        
+
     def testSimple(self):
         hai_uid = post('hai')
         logging.debug(hai_uid)
         self.assertEqual('hai', retrieve(hai_uid))
         self.assertTrue(time.time() - get_creation_timestamp(hai_uid) < 1)
-    
+
     def testNonExistent(self):
         with self.assertRaises(NonExistentUID):
             retrieve('not here')
@@ -33,4 +33,4 @@ class TestMemoryDB(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
-    
+
