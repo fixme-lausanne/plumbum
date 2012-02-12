@@ -25,6 +25,8 @@ try:
 except DataBaseError
     pass
 
+The database connection is lazy, if it does not exist, it will be attempted.
+
 TODO
 ----
 linked_uid_list is not implemented
