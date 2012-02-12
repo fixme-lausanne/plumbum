@@ -56,15 +56,19 @@ def post(utf8_text,
     entry['utf8_text'] = utf8_text
     entry['expiry_policy'] = expiry_policy
     entry['timestamp'] = str(time.time())
-    hash_ = utils.make_uid(utf8_text, expiry_policy, preferred_uid, entry['timestamp'])
+    hash_, uid_len_ = utils.make_uid(utf8_text
+            , expiry_policy
+            , preferred_uid
+            , entry['timestamp'])
 
     jentry = json.dumps(entry)
-    write_success = db.add(hash_, jentry)
-    while not write_success:
-        #TODO in theory, infinite loops can happen here
-        hash_ = utils.refine_uid(hash_)
-        write_success = db.add(hash_, jentry)
-    return hash_
+    write_success = False
+    for i in range(uid_len_, len(hash_)):
+        write_success = db.add(hash_[:i], jentry)
+        if write_success:
+            uid_len_ = i
+            break
+    return hash_[:uid_len_]
 
 def retrieve(uid):
     return _retrieve_json(uid)['utf8_text']

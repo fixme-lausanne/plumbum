@@ -14,10 +14,12 @@ def post(utf8_text, expiry_policy=api.EXPIRY_NEVER, preferred_uid=None,
          _linked_uid_list=None):
     with _lock:
         timestamp = time.time()
-        uid = utils.make_uid(utf8_text, expiry_policy,
+        full_uid, uid_len = utils.make_uid(utf8_text, expiry_policy,
                              preferred_uid, timestamp)
+        uid = full_uid[:uid_len]
         while uid in _db:
-            uid = utils.refine_uid(uid)
+            uid_len += 1
+            uid = full_uid[:uid_len]
         _db[uid] = TextAndTimestamp(utf8_text, timestamp)
         return uid
 
