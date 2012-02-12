@@ -17,7 +17,7 @@ class Test(unittest.TestCase):
 
     def test_wrong_close(self):
         self.assertRaises(dbk.DataBaseError, dbk.bye())
-    
+
     def test_wrong_policy(self):
         dbk.init()
         self.assertRaises(ValueError, dbk.post("test", expiry_policy='NO_SUCH_POLICY'))
@@ -35,4 +35,4 @@ class Test(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
-    
+
