@@ -12,7 +12,6 @@ except ImportError:
 coloration')
 import database as db
 from httpserver.bottle import run, request, abort, HTTPResponse, Bottle
-from database.api import NonExistentUID
 from httpserver.bottle import template as _template
 
 def template(path, base='httpserver/templates', **kwargs):
@@ -45,7 +44,7 @@ def raw_retrieve(uid):
     """Fetch a pastebin entry without coloration"""
     try:
         return db.retrieve(uid)
-    except NonExistentUID:
+    except db.NonExistentUID:
         abort(404, 'No such item "%s"' % uid)
 
 
@@ -58,7 +57,7 @@ def retrieve(uid):
         colorized_style = HtmlFormatter().get_style_defs('.highlight')
         colorized_content = highlight(raw_paste, guess_lexer(raw_paste), HtmlFormatter())
         return template('colorized', uid=uid, colorized_style=colorized_style, colorized_content=colorized_content)
-    except NonExistentUID:
+    except db.NonExistentUID:
         abort(404, 'No such item "%s"' % uid)
     except NameError:
         return raw_retrieve(uid)

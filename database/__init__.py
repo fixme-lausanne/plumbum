@@ -1,5 +1,6 @@
 import sys
 import logging
+from database.api import NonExistentUID
 
 try:
     from database.db_kyoto import post, retrieve
