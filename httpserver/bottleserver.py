@@ -34,10 +34,11 @@ def post():
     #preferred_uid = request.forms.get('')
     uid = db.post(content)
     url = '%s%s' % (request.url, uid)
+    raw_url = url + '/raw'
     if request.forms.get('from_form'):
-        return template('paste_done', url=url)
+        return template('paste_done', url=url, raw_url=raw_url)
     else:
-        return HTTPResponse(status=201, header={'Location': url})
+        return HTTPResponse(raw_url, status=201, header={'Location': raw_url})
 
 
 @plubum.route('/:uid/raw', method='GET')
