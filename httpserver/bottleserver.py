@@ -16,7 +16,9 @@ import database as db
 from bottle import run, request, abort, HTTPResponse, Bottle
 from bottle import template as _template
 
-def template(path, base='templates', **kwargs):
+RAW_USER_AGENT=["curl", "wget", "links", "lynks"]
+
+def template(path, base='httpserver/templates', **kwargs):
     return _template(join(base, path), kwargs)
 
 plubum = Bottle()
@@ -55,8 +57,19 @@ def raw_retrieve(uid):
 @plubum.route('/:uid/', method='GET')
 def retrieve(uid):
     """Fetch a pastebin entry with coloration using Pygments lib"""
+    #check if the client is raw
+    try:
+        user_agent = request.header['User-Agent']
+        if user_agent.split("/")[0] in RAW_USER_AGENT:
+            return raw_retrieve(uid)
+    except KeyError:
+        return raw_retrieve(uid)
     try:
         raw_paste = db.retrieve(uid)
+    except  db.NonExistentUID:
+        abort(404, 'No such item "%s"' % uid)
+
+    try:
         colorized_style = HtmlFormatter().get_style_defs('.highlight')
         colorized_content = highlight(raw_paste, guess_lexer(raw_paste), HtmlFormatter())
         return template('colorized', uid=uid, colorized_style=colorized_style, colorized_content=colorized_content)
