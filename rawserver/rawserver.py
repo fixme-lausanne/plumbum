@@ -46,6 +46,7 @@ self.post_handler)
             elif buf[-1] == b'\x0a':
                 #netcat support
                 content += buf[:-1]
+                break
             content += buf
         uid = db.post("".join(map(str, content)))
         state = conn.sendall((uid + "\r\n").encode('UTF-8'))
@@ -61,7 +62,12 @@ self.post_handler)
         uid = list()
         while 1:
             buf = conn.recv(SocketServerManager.BUF_SIZE)
-            if not buf:
+            if buf == b'\xff\xec':
+                #telnet support
+                break
+            elif buf[-1] == b'\x0a':
+                #netcat support
+                uid += buf[:-1]
                 break
             uid += buf
         try:
