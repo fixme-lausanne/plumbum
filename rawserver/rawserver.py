@@ -4,7 +4,7 @@ import socket
 from multiprocessing import Process
 from threading import Semaphore, Thread
 import logging
-
+import array
 # Add the parent path of this file to pythonpath, so we can import database
 from os.path import dirname, abspath
 import sys
@@ -27,10 +27,10 @@ class SocketServerManager(Thread):
         self.host = host
         self.servers = []
         post_serv = self.socket_server_factory(self.host, self.post_port,
-self.get_handler)
+self.post_handler)
         self.servers.append(post_serv)
         get_serv = self.socket_server_factory(self.host, self.get_port,
-self.post_handler)
+self.get_handler)
         self.servers.append(get_serv)
 
     def post_handler(self, conn, addr):
@@ -43,12 +43,13 @@ self.post_handler)
             if buf == b'\xff\xec':
                 #telnet support
                 break
-            elif buf[-1] == b'\x0a':
+            elif b'\x0a' in buf:
                 #netcat support
-                content += buf[:-1]
+                content += buf
                 break
             content += buf
-        uid = db.post("".join(map(str, content)))
+        decoded_content = str(array.array('B', content).tostring().rstrip().decode('UTF-8'))
+        uid = db.post(decoded_content)
         state = conn.sendall((uid + "\r\n").encode('UTF-8'))
         if state:
             logging.debug('Data not fully transmitted')
@@ -62,18 +63,22 @@ self.post_handler)
         uid = list()
         while 1:
             buf = conn.recv(SocketServerManager.BUF_SIZE)
+            logging.debug("Buf is :{}".format(buf))
             if buf == b'\xff\xec':
                 #telnet support
                 break
-            elif buf[-1] == b'\x0a':
+            elif b'\x0a' in buf:
                 #netcat support
-                uid += buf[:-1]
+                uid += buf
                 break
             uid += buf
+        decoded_uid = str(array.array('B', uid).tostring().rstrip().decode('UTF-8'))
+        print(decoded_uid.strip())
+        logging.debug("Decoded uid is {}".format(decoded_uid))
         try:
-            data = db.retrieve(uid)
+            data = db.retrieve(decoded_uid)
         except db.NonExistentUID:
-            data = "Uid %s not found" % uid
+            data = "Uid %s not found" % decoded_uid
         state = conn.sendall(data.encode("UTF-8"))
         if state:
             logging.debug('Data not fully transmitted')
@@ -99,7 +104,7 @@ self.post_handler)
         except KeyboardInterrupt:
             for s in self.servers:
                 s.close()
-
+                
 class SocketServer(Process):
     """A simple telnet server with a callback"""
 
@@ -158,8 +163,13 @@ class SocketServer(Process):
         fs(arg[0], arg[1])
         self.sem.release()
     
+    def close(self):
+        pass
+        
 def start():
     SocketServerManager().start()
     
 if __name__ == "__main__":
+    sys.stderr.write("Debug mode \n")
+    logging.basicConfig(level=logging.INFO)
     SocketServerManager().run()
