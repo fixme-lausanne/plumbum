@@ -55,7 +55,6 @@ self.get_handler)
         if state:
             logging.debug('Data not fully transmitted')
             logging.warning('The data sent have not been transmitted properly')
-        conn.close()
 
     def get_handler(self, conn, addr):
         """handle the retrieving of a already created pastebin from
@@ -83,7 +82,6 @@ self.get_handler)
         if state:
             logging.debug('Data not fully transmitted')
             logging.warning('The data sent have not been transmitted properly')
-        conn.close()
         logging.debug('Data retrieved')
 
     def socket_server_factory(self, host, port, callback):
@@ -160,8 +158,15 @@ class SocketServer(Thread):
         """Decorator for the callback function, limite the maximum
         number of simultaneous thread"""
         self.sem.acquire()
-        fs(arg[0], arg[1])
-        self.sem.release()
+        #just to be sure that if anything goes really wrong during the 
+        #connexion that the connection will be correctly closed
+        try:
+            fs(arg[0], arg[1])
+        except Exception as e:
+            logging.error(e)
+        finally:
+            arg[0].close()
+            self.sem.release()
     
     def close(self):
         pass
