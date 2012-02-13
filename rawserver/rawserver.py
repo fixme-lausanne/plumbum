@@ -1,10 +1,8 @@
 #!/usr/bin/env python3
 """simple socket server with emulation of post/get using two port"""
 import socket
-from multiprocessing import Process
 from threading import Semaphore, Thread
 import logging
-import array
 
 # Add the parent path of this file to pythonpath, so we can import database
 from os.path import dirname, abspath
@@ -22,7 +20,6 @@ class SocketServerManager(Thread):
     def __init__(self, post_port=1338, get_port=1339, host=None):
         """simple init, the server will be bound on host"""
         Thread.__init__(self)
-        Process.__init__(self)
         self.post_port = post_port
         self.get_port = get_port
         self.host = host
@@ -52,6 +49,7 @@ self.get_handler)
         decoded_content = "".join(content).rstrip()
         logging.debug("Content uploaded is :|{}|".format(decoded_content))
         uid = db.post(decoded_content)
+        logging.debug("content retrieved " + db.retrieve(uid))
         logging.debug("Uid is :|{}|".format(uid))
         state = conn.sendall((uid + "\r\n").encode('UTF-8'))
         if state:
@@ -107,16 +105,16 @@ self.get_handler)
             for s in self.servers:
                 s.close()
                 
-class SocketServer(Process):
+class SocketServer(Thread):
     """A simple telnet server with a callback"""
 
     """define the number of simultaneous thread that can be awaken to
     handle the connexions"""
     SEM_MAX = 30
-
+    
     def __init__(self, callback_method, skts):
         """Simple init"""
-        Process.__init__(self)
+        Thread.__init__(self)
         self.callback = callback_method
         self.skts = skts
         self.sem = Semaphore(SocketServer.SEM_MAX)
