@@ -19,9 +19,9 @@ import database as db
 from bottle import run, request, abort, HTTPResponse, Bottle
 from bottle import template as _template
 
-RAW_USER_AGENT=["curl", "wget", "links", "lynks"]
+RAW_USER_AGENT = ["curl", "wget", "links", "lynks", "elinks"]
 
-def template(path, base='httpserver/templates', **kwargs):
+def template(path, base='templates', **kwargs):
     """Generate the content of the template"""
     return _template(join(base, path), kwargs)
 
@@ -66,7 +66,10 @@ def raw_retrieve(uid):
 @PLUMBUM.route('/:uid/', method='GET')
 def retrieve(uid):
     """Fetch a pastebin entry with coloration using Pygments lib"""
-    if PYGMENT_SET:
+    user = request.get_header("User-Agent")
+    if not user or user.split("/")[0] in RAW_USER_AGENT:
+        return raw_retrieve(uid)
+    if PYGMENT_SET :
         try:
             raw_paste = db.retrieve(uid)
             colorized_style = HtmlFormatter().get_style_defs('.highlight')
