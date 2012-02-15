@@ -42,7 +42,6 @@ def post():
     prefered_uid = request.forms.get('puid')
     if not prefered_uid:
         prefered_uid = None
-    #preferred_uid = request.forms.get('')
     uid = db.post(content, prefered_uid=prefered_uid)
     url = '%s%s' % (request.url, uid)
     raw_url = url + '/raw'
@@ -88,6 +87,7 @@ def start(host='0.0.0.0', port=8080):
 
 if __name__ == '__main__':
     """Start the server if it's launch directly from the command line. 
-    It will be in DEBUG mode"""
+    It will be in DEBUG mode
+    """
     logging.getLogger().setLevel(logging.DEBUG)
     run(PLUMBUM, host='localhost', port=8080, debug=True, reloader=True)
