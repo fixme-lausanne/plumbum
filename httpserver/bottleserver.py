@@ -14,6 +14,7 @@ except ImportError:
     logging.error('Cannot import pygments lib, will not provide \
 coloration')
     PYGMENT_SET = False
+    
 import database as db
 from bottle import run, request, abort, HTTPResponse, Bottle
 from bottle import template as _template
@@ -35,8 +36,13 @@ def index():
 def post():
     """Post a new pastebin"""
     content = request.forms.get('content')
+    if content == "":
+        abort(404, "You must provide a content")
+    prefered_uid = request.forms.get('puid')
+    if not prefered_uid:
+        prefered_uid = None
     #preferred_uid = request.forms.get('')
-    uid = db.post(content)
+    uid = db.post(content, prefered_uid=prefered_uid)
     url = '%s%s' % (request.url, uid)
     raw_url = url + '/raw'
     if request.forms.get('from_form'):
