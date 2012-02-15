@@ -56,7 +56,6 @@ def post(utf8_text,
     entry['utf8_text'] = utf8_text
     entry['expiry_policy'] = expiry_policy
     entry['timestamp'] = str(time.time())
-<<<<<<< HEAD
     if preferred_uid is None:
         hash_ = utils.make_uid(utf8_text, expiry_policy, entry['timestamp'])
     else:
@@ -68,21 +67,6 @@ def post(utf8_text,
         hash_ = utils.refine_uid()
         write_success = db.add(hash_, jentry)
     return hash_
-=======
-    hash_, uid_len_ = utils.make_uid(utf8_text
-            , expiry_policy
-            , preferred_uid
-            , entry['timestamp'])
-
-    jentry = json.dumps(entry)
-    write_success = False
-    for i in range(uid_len_, len(hash_)):
-        write_success = db.add(hash_[:i], jentry)
-        if write_success:
-            uid_len_ = i
-            break
-    return hash_[:uid_len_]
->>>>>>> uid_refine
 
 def retrieve(uid):
     return _retrieve_json(uid)['utf8_text']
