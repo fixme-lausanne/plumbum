@@ -1,24 +1,23 @@
 from collections import namedtuple
-from threading import Lock
+from threading import Lock as TLock
 import database.api as api
 import database.utils as utils
 import time
 
 _db = {}
-_lock = Lock()
-
+TLOCK = TLock()
 TextAndTimestamp = namedtuple('TextAndTimestamp', 'text timestamp')
 
 
-def post(utf8_text, expiry_policy=api.EXPIRY_NEVER, preferred_uid=None,
+def post(utf8_text, expiry_policy=api.EXPIRY_NEVER, prefered_uid=None,
          _linked_uid_list=None):
-    with _lock:
+    with TLOCK:
         timestamp = time.time()
-        if preferred_uid is None:
+        if prefered_uid is None:
             uid = utils.make_uid(utf8_text, expiry_policy,
                                  timestamp)
         else:
-            uid = preferred_uid
+            uid = prefered_uid
 
         while uid in _db:
             uid = utils.refine_uid()

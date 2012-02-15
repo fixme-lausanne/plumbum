@@ -2,6 +2,7 @@
 """simple socket server with emulation of post/get using two port"""
 import socket
 from threading import Semaphore, Thread
+from time import sleep
 import logging
 
 # Add the parent path of this file to pythonpath, so we can import database
@@ -17,7 +18,7 @@ class SocketServerManager(Thread):
     """Size of the receive buffer"""
     BUF_SIZE = 1024
 
-    def __init__(self, post_port=1338, get_port=1339, host=None):
+    def __init__(self, post_port=1338, get_port=1339, host='localhost'):
         """simple init, the server will be bound on host"""
         Thread.__init__(self)
         self.post_port = post_port
@@ -120,6 +121,7 @@ class SocketServer(Thread):
     def bound(self, s):
         """Bound the server to the socket and listen to new connection"""
         af, socktype, proto, _canonname, sa = s
+
         try:
             s = socket.socket(af, socktype, proto)
         except socket.error as msg:
@@ -130,14 +132,21 @@ class SocketServer(Thread):
             s.listen(1)
         except socket.error as msg:
             #pretty bad
-            print(msg)
-            s.close()
-            s = None
-
-        if s is None:
-            logging.error("Could not start server, socket cannot be bound")
-            return
-
+            if msg.errno == socket.errno.EADDRINUSE:
+                logging.error("Adress already in use, trying again in 30 seconds")
+                sleep(30)
+                s.close()
+                self.bound(s)
+                return
+            elif msg.errno == socket.errno.ENOTSUP:
+                logging.error("Cannot bind on this interface, as it is not enable")
+                s.close()
+                return
+            else:
+                logging.debug("Error while binding the socket : {}".format(str(msg)))
+                logging.error("Could not start server, socket cannot be bound")
+                return
+        logging.debug("correctly bound on ")
         while 1:
             logging.info("Connexion done")
             acc = s.accept()

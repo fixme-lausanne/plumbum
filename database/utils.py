@@ -1,6 +1,4 @@
 import hashlib
-import random
-import string
 
 
 def make_uid(utf8_text, expiry_policy, timestamp):
@@ -11,3 +9,4 @@ def make_uid(utf8_text, expiry_policy, timestamp):
 def refine_uid():
     return ''.join([random.choice(string.ascii_lowercase + string.digits) for _
         in range(8)])
+
