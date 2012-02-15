@@ -1,4 +1,5 @@
 import hashlib
+import random
 
 
 def make_uid(utf8_text, expiry_policy, timestamp):
