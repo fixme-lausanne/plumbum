@@ -9,7 +9,7 @@ TLOCK = TLock()
 TextAndTimestamp = namedtuple('TextAndTimestamp', 'text timestamp')
 
 
-def post(utf8_text, expiry_policy=api.EXPIRY_NEVER, preferred_uid=None,
+def post(utf8_text, expiry_policy=api.EXPIRY_NEVER, prefered_uid=None,
          _linked_uid_list=None):
     with TLOCK:
         timestamp = time.time()
