@@ -9,9 +9,11 @@ try:
     from pygments import highlight
     from pygments.lexers import guess_lexer
     from pygments.formatters import HtmlFormatter
+    PYGMENT_SET = True
 except ImportError:
     logging.error('Cannot import pygments lib, will not provide \
 coloration')
+    PYGMENT_SET = False
 import database as db
 from bottle import run, request, abort, HTTPResponse, Bottle
 from bottle import template as _template
@@ -57,15 +59,16 @@ def raw_retrieve(uid):
 @plubum.route('/:uid/', method='GET')
 def retrieve(uid):
     """Fetch a pastebin entry with coloration using Pygments lib"""
-    try:
-        raw_paste = db.retrieve(uid)
-        colorized_style = HtmlFormatter().get_style_defs('.highlight')
-        colorized_content = highlight(raw_paste, guess_lexer(raw_paste),
-         HtmlFormatter())
-        return template('colorized', uid=uid, colorized_style=colorized_style, colorized_content=colorized_content)
-    except db.NonExistentUID:
-        abort(404, 'No such item "%s"' % uid)
-    except NameError:
+    if PYGMENT_SET:
+        try:
+            raw_paste = db.retrieve(uid)
+            colorized_style = HtmlFormatter().get_style_defs('.highlight')
+            colorized_content = highlight(raw_paste, guess_lexer(raw_paste),
+             HtmlFormatter())
+            return template('colorized', uid=uid, colorized_style=colorized_style, colorized_content=colorized_content)
+        except db.NonExistentUID:
+            abort(404, 'No such item "%s"' % uid)
+    else:
         return raw_retrieve(uid)
 
 def start(host='0.0.0.0', port=8080):
