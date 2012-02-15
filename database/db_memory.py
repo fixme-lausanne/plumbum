@@ -14,7 +14,7 @@ def post(utf8_text, expiry_policy=api.EXPIRY_NEVER, prefered_uid=None,
     with TLOCK:
         timestamp = time.time()
         full_uid, uid_len = utils.make_uid(utf8_text, expiry_policy,
-                             preferred_uid, timestamp)
+                             prefered_uid, timestamp)
         uid = full_uid[:uid_len]
         while uid in _db:
             uid_len += 1
