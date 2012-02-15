@@ -73,6 +73,6 @@ def start(host='0.0.0.0', port=8080):
     run(app=plubum, host=host, port=port)
 
 if __name__ == '__main__':
-    logging.getLogger().level = logging.debug
+    logging.getLogger().setLevel(logging.DEBUG)
     
     run(plubum, host='localhost', port=8080, debug=True, reloader=True)
