@@ -16,10 +16,12 @@ import database as db
 from bottle import run, request, abort, HTTPResponse, Bottle
 from bottle import template as _template
 
+
 def template(path, base='templates', **kwargs):
     return _template(join(base, path), kwargs)
 
 plubum = Bottle()
+
 
 @plubum.route('/', method='GET')
 def index():
@@ -58,7 +60,8 @@ def retrieve(uid):
     try:
         raw_paste = db.retrieve(uid)
         colorized_style = HtmlFormatter().get_style_defs('.highlight')
-        colorized_content = highlight(raw_paste, guess_lexer(raw_paste), HtmlFormatter())
+        colorized_content = highlight(raw_paste, guess_lexer(raw_paste),
+         HtmlFormatter())
         return template('colorized', uid=uid, colorized_style=colorized_style, colorized_content=colorized_content)
     except db.NonExistentUID:
         abort(404, 'No such item "%s"' % uid)
