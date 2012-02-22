@@ -74,14 +74,11 @@ class PostHandler(GeneralHandler):
         decoded_content = "".join(content).rstrip()
         logging.debug("Content uploaded is :|%s|" % decoded_content)
         uid = db.post(decoded_content)
-        logging.debug("content retrieved " + db.retrieve(uid))
         logging.debug("Uid is :|%s|" % uid)
         state = self.request.sendall((uid + "\r\n").encode('UTF-8'))
         if state:
             logging.debug('Data not fully transmitted')
             logging.warning('The data sent have not been transmitted properly')
-
-    #server host is a tuple ('host', port)
 
 def start(host=''):
     post_server = SocketServer.ThreadingTCPServer((host, 1338), PostHandler)
