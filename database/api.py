@@ -26,3 +26,19 @@ def retrieve(uid):
 
 def get_linked(uid):
     pass
+
+def _check_expiry(entry):
+    timestamp = datetime.date.fromtimestamp(float(entry['timestamp']))
+    now = datetime.date.fromtimestamp(time.time())
+    policy = entry['expiry_policy']
+    if policy == api.EXPIRY_HOUR_FROM_WRITE:
+        return now - timestamp < datetime.timedelta(hours = 1)
+    elif policy == api.EXPIRY_HOUR_FROM_READ:
+        return now - timestamp < datetime.timedelta(hours = 1)
+    elif policy == api.EXPIRY_WEEK_FROM_WRITE:
+        return now - timestamp < datetime.timedelta(weeks = 1)
+    elif policy == api.EXPIRY_WEEK_FROM_READ:
+        return now - timestamp < datetime.timedelta(weeks = 1)
+    else:
+        return False
+
