@@ -24,10 +24,5 @@ def post(utf8_text, expiry_policy=EXPIRY_NEVER, prefered_uid=None,
 def retrieve(uid):
     pass
 
-
-def get_creation_timestamp(uid):
-    pass
-
-
 def get_linked(uid):
     pass
