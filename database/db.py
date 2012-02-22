@@ -1,11 +1,30 @@
+from abc import abstractmethod, ABCMeta
 
-def delete(uid):
+"""Just an abstract class for a database"""
+class DataBase(object):
+    __metaclass__ = ABCMeta
 
-#content
-#None if error
-def get(uid):
+    @abstractmethod
+    @staticmethod
+    def delete(uid):
+        pass
+        
+    @abstractmethod
+    @staticmethod
+    def read(uid):
+        pass
+    
+    @abstractmethod
+    @staticmethod
+    def write(utf8_content, preferred_uid=None):
+        pass
 
-#uid
-def post(utf8_content, preferred_uid=None):
+class NonExistentUID(Exception):
+    def __init__(self, uid):
+        self.uid = uid
 
-def update_timestamp(uid):
+    def __str__(self):
+        return repr(self.uid)
+
+class DataBaseError(Exception):
+    pass
