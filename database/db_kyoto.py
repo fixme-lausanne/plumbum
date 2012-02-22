@@ -94,6 +94,3 @@ def _retrieve_json(uid):
 def _check_db():
     if db == None:
         init()
-
-
-
