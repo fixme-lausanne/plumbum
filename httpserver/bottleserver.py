@@ -79,8 +79,8 @@ def retrieve(uid):
             colorized_style=colorized_style, 
             colorized_content=colorized_content)
         except db.NonExistentUID:
-            logging.debug("404 occured on item {}".format(uid))
-            abort(404, 'No such item "%s"'.format(uid))
+            logging.debug("404 occured on item %s" % uid)
+            abort(404, 'No such item "%s"' % uid)
     else:
         return raw_retrieve(uid)
 
