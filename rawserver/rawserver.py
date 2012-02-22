@@ -72,7 +72,7 @@ class PostHandler(GeneralHandler):
                 break
             content += buf
         decoded_content = "".join(content).rstrip()
-        logging.debug("Content uploaded is :|%s|".format(decoded_content))
+        logging.debug("Content uploaded is :|%s|" % decoded_content)
         uid = db.post(decoded_content)
         logging.debug("content retrieved " + db.retrieve(uid))
         logging.debug("Uid is :|%s|" % uid)
