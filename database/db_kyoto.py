@@ -93,7 +93,7 @@ class KyotoDB(db.DataBase):
     def get_linked(uid):
         pass
 
-    def bye():
+    def close():
         global db
         if db !=None and not db.close():
             raise DataBaseError("close error: " + str(db.error()))
@@ -110,20 +110,3 @@ class KyotoDB(db.DataBase):
     def _check_db():
         if db == None:
             init()
-
-    def _check_expiry(entry):
-        read_timestamp = datetime.date.fromtimestamp(float(entry['read_timestamp']))
-        write_timestamp = datetime.date.fromtimestamp(float(entry['timestamp']))
-        now = datetime.date.fromtimestamp(time.time())
-        policy = entry['expiry_policy']
-        if policy == api.EXPIRY_HOUR_FROM_WRITE:
-            return now - write_timestamp < datetime.timedelta(hours = 1)
-        elif policy == api.EXPIRY_HOUR_FROM_READ:
-            return now - read_timestamp < datetime.timedelta(hours = 1)
-        elif policy == api.EXPIRY_WEEK_FROM_WRITE:
-            return now - write_timestamp < datetime.timedelta(weeks = 1)
-        elif policy == api.EXPIRY_WEEK_FROM_READ:
-            return now - read_timestamp < datetime.timedelta(weeks = 1)
-        else:
-            return False
-
