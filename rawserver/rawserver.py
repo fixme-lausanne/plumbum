@@ -33,7 +33,7 @@ class GetHandler(GeneralHandler):
         uid = list()
         while 1:
             buf = self.request.recv(GeneralHandler.BUF_SIZE).decode("UTF-8")
-            logging.debug("Uid buffer is :|{}|".format(buf))
+            logging.debug("Uid buffer is :|%s|" % buf)
             #if buf == b'\xff\xec':
                 #telnet support
             #    break
@@ -43,11 +43,11 @@ class GetHandler(GeneralHandler):
                 break
             uid += buf
         decoded_uid = "".join(uid).rstrip()
-        logging.debug("Uid decoded is |{}|".format(decoded_uid))
+        logging.debug("Uid decoded is |%s|" % decoded_uid)
         try:
             data = db.retrieve(decoded_uid)
         except db.NonExistentUID:
-            data = "Uid {} not found".format(decoded_uid)
+            data = "Uid %s not found" % decoded_uid
         state = self.request.sendall(data.encode("UTF-8"))
         if state:
             logging.debug('Data not fully transmitted')
@@ -72,10 +72,10 @@ class PostHandler(GeneralHandler):
                 break
             content += buf
         decoded_content = "".join(content).rstrip()
-        logging.debug("Content uploaded is :|{}|".format(decoded_content))
+        logging.debug("Content uploaded is :|%s|".format(decoded_content))
         uid = db.post(decoded_content)
         logging.debug("content retrieved " + db.retrieve(uid))
-        logging.debug("Uid is :|{}|".format(uid))
+        logging.debug("Uid is :|%s|" % uid)
         state = self.request.sendall((uid + "\r\n").encode('UTF-8'))
         if state:
             logging.debug('Data not fully transmitted')
