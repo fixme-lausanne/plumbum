@@ -6,7 +6,7 @@ except ImportError:
     import socketserver as SocketServer
 import logging
 import socket
-from threading import Semaphore, Thread
+from threading import Thread
 from time import sleep
 import logging
 
@@ -20,10 +20,10 @@ import database as db
 class GeneralHandler(SocketServer.BaseRequestHandler):
     BUF_SIZE = 1024
     def setup(self):
-        logging.debug(self.client_address, 'connected!')
+        logging.debug('%s connected!' % str(self.client_address))
         
     def finish(self):
-        logging.debug(self.client_address, 'disconnected')
+        logging.debug('%s disconnected' % str(self.client_address))
         
 class GetHandler(GeneralHandler):
     def handle(self):
@@ -63,6 +63,7 @@ class PostHandler(GeneralHandler):
         content = list()
         while 1:
             buf = self.request.recv(GeneralHandler.BUF_SIZE).decode("UTF-8")
+            logging.debug("Uid buffer is :|%s|" % buf)
             #if buf == b'\xff\xec':
             #    telnet support
             #    break
@@ -75,7 +76,7 @@ class PostHandler(GeneralHandler):
         logging.debug("Content uploaded is :|%s|" % decoded_content)
         uid = db.post(decoded_content)
         logging.debug("Uid is :|%s|" % uid)
-        state = self.request.sendall((uid + "\r\n").encode('UTF-8'))
+        state = self.request.sendall(uid.encode('UTF-8'))
         if state:
             logging.debug('Data not fully transmitted')
             logging.warning('The data sent have not been transmitted properly')
@@ -83,9 +84,11 @@ class PostHandler(GeneralHandler):
 def start(host=''):
     post_server = SocketServer.ThreadingTCPServer((host, 1338), PostHandler)
     get_server = SocketServer.ThreadingTCPServer((host, 1339), GetHandler)
+    Thread(target=get_server.serve_forever).start()
+    logging.debug("get is started !!")
     post_server.serve_forever()
-    get_server.serve_forever()
-
+    logging.debug("post is started !!")
+    
 if __name__ == "__main__":
     sys.stderr.write("Debug mode \n")
     logging.getLogger().setLevel(logging.DEBUG)
