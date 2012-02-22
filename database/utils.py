@@ -1,5 +1,6 @@
 import hashlib
 import random
+import string
 
 try:
     rng = random.SystemRandom()
