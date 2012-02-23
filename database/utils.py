@@ -5,6 +5,7 @@ import string
 try:
     rng = random.SystemRandom()
 except NotImplementedError:
+    #fallback if the system doesn't have a random number generator
     rng = random.Random()
 
 def make_uid(utf8_text, expiry_policy, timestamp):

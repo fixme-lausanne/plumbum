@@ -1,25 +1,19 @@
-from collections import namedtuple
-from threading import Lock as TLock
 import database.utils as utils
 import time
 import pymongo
 import db
 
-_db = None
-TLOCK = TLock()
-TextAndTimestamp = namedtuple('TextAndTimestamp', 'text timestamp')
-
 class MongoDB(db.DataBase):
-    DBConn = pymongo.Connection('localhost', 27017)
-    DB = DBConn['plumbum']
+    _DBConn = pymongo.Connection('localhost', 27017)
+    _DB = _DBConn['plumbum']
     
     def delete(uid):
-        MongoDB.DB.remove(uid)
+        MongoDB._DB.remove(uid)
         
     def read(uid):
         try:
             MongoDB.DB.get(uid)
-        except InvalidKey:
+        except KeyError:
             raise db.NonExistentUID(uid)
                     
     def write(utf8_content, preferred_uid=None):
@@ -31,6 +25,6 @@ class MongoDB(db.DataBase):
 
         while uid in _db:
             uid = utils.refine_uid()
-        _db[uid] = TextAndTimestamp(utf8_content, timestamp)
+        MongoDB._DB[uid] = TextAndTimestamp(utf8_content, timestamp)
         return uid
 

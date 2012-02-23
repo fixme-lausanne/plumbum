@@ -1,4 +1,7 @@
 from abc import abstractmethod, ABCMeta
+from collections import namedtuple
+
+TextAndTimestamp = namedtuple('TextAndTimestamp', 'text timestamp')
 
 """Just an abstract class for a database"""
 class DataBase(object):

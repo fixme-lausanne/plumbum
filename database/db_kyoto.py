@@ -1,10 +1,10 @@
-import datetime
 import time
 import json
 import kyotocabinet as kc
 import database.api as api
 import database.utils as utils
 from db import DataBase
+
 """ Interact with Kyoto Cabinet
 
 Example
@@ -33,23 +33,21 @@ TODO
 linked_uid_list is not implemented
 """
 class KyotoDB(db.DataBase):
-    DB = None
+    _DB = None
 
     def init(db_file="casket.kch"):
         global db
-        db = kc.DB()
+        KyotoDB._DB = kc.DB()
         if not db.open(db_file, kc.DB.OWRITER | kc.DB.OCREATE):
             raise db.DataBaseError("open error: " + str(db.error()))
+            
     def delete(uid):
         pass
     def read(uid):
         pass
         
     def write(utf8_content, preferred_uid=None):
-        pass
-        
-    def post(utf8_text,
-            expiry_policy=api.EXPIRY_NEVER,
+                    expiry_policy=api.EXPIRY_NEVER,
             preferred_uid=None,
             linked_uid_list=None):
         _check_db()
@@ -64,39 +62,12 @@ class KyotoDB(db.DataBase):
             hash_ = utils.make_uid(utf8_text, expiry_policy, entry['timestamp'])
         else:
             hash_ = preferred_uid
-
-        jentry = json.dumps(entry)
-        write_success = db.add(hash_, jentry)
-        while not write_success:
-            hash_ = utils.refine_uid()
-            write_success = db.add(hash_, jentry)
-        return hash_
-
-    def retrieve(uid):
-        entry = _retrieve_json(uid)
-        now = time.time()
-        if entry['read_timestamp'] is None:
-            entry['read_timestamp'] = str(now)
-        if _check_expiry(entry):
-            db.remove(uid)
-            raise api.NonExistentUID
-        else:
-            if entry['read_timestamp'] == now:
-                jentry = json.dumps(entry)
-                #TODO check if write succeeded
-                write_success = db.set(uid, jentry)
-            return entry['utf8_text']
-
-    def get_creation_timestamp(uid):
-        return _retrieve_json(uid)['timestamp']
-
-    def get_linked(uid):
-        pass
-
+        KyotoDB._DB[hash_] = entry
+        
     def close():
         global db
-        if db !=None and not db.close():
-            raise DataBaseError("close error: " + str(db.error()))
+        if KyotoDB._DB != None and not KyotoDB._DB.close():
+            raise DataBaseError("close error: " + str(KyotoDB._DB.error()))
         db = None
 
     def _retrieve_json(uid):

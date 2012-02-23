@@ -41,4 +41,3 @@ def _check_expiry(entry):
         return now - timestamp < datetime.timedelta(weeks = 1)
     else:
         return False
-
