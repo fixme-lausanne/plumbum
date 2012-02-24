@@ -1,10 +1,12 @@
-try:
-    import db_kyoto as db
-except:
-    try:
-        import db_mongo as db
-    except:
-        import db_memory as db
+from os.path import dirname, abspath
+import sys
+sys.path.append(dirname(abspath(__file__)))
+
+#TODO import and test DBs
+
+from db_memory import MemoryDB as db
+import time
+import datetime
 EXPIRY_NEVER = 1
 EXPIRY_HOUR_FROM_READ = 2
 EXPIRY_HOUR_FROM_WRITE = 3
@@ -23,9 +25,8 @@ class NonExistentUID(Exception):
         return repr(self.uid)
 
 
-def post(utf8_text, expiry_policy=EXPIRY_NEVER, prefered_uid=None,
-        linked_uid_list=None):
-    if expiry_policy not in api.expiry_policies:
+def post(utf8_text, expiry_policy=EXPIRY_NEVER, prefered_uid=None,linked_uid_list=None):
+    if expiry_policy not in expiry_policies:
         raise ValueError("Policy %s is not in policies" % expiry_policy)
     entry = {}
     entry['text'] = utf8_text
@@ -36,11 +37,11 @@ def post(utf8_text, expiry_policy=EXPIRY_NEVER, prefered_uid=None,
     db.write(entry, prefered_uid)
 
 
-def retrieve(uid)
+def retrieve(uid):
     entry = db.read(uid)
     is_expired = _check_expiry(entry)
     if is_expired:
-        delete(uid)
+        db.delete(uid)
         raise NonExistentUID(uid)
     else:
         return entry['text']
@@ -52,13 +53,13 @@ def _check_expiry(entry):
     timestamp = datetime.date.fromtimestamp(float(entry['timestamp']))
     now = datetime.date.fromtimestamp(time.time())
     policy = entry['expiry_policy']
-    if policy == api.EXPIRY_HOUR_FROM_WRITE:
+    if policy == EXPIRY_HOUR_FROM_WRITE:
         return now - timestamp < datetime.timedelta(hours = 1)
-    elif policy == api.EXPIRY_HOUR_FROM_READ:
+    elif policy == EXPIRY_HOUR_FROM_READ:
         return now - timestamp < datetime.timedelta(hours = 1)
-    elif policy == api.EXPIRY_WEEK_FROM_WRITE:
+    elif policy == EXPIRY_WEEK_FROM_WRITE:
         return now - timestamp < datetime.timedelta(weeks = 1)
-    elif policy == api.EXPIRY_WEEK_FROM_READ:
+    elif policy == EXPIRY_WEEK_FROM_READ:
         return now - timestamp < datetime.timedelta(weeks = 1)
     else:
         return False

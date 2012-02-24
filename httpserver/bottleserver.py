@@ -84,12 +84,10 @@ def retrieve(uid):
     else:
         return raw_retrieve(uid)
 
-def start(host='0.0.0.0', port=8080, wsgi=False, server=):
+def start(host='0.0.0.0', port=8080, wsgi=False):
     """start the app, that's all"""
     logging.debug("Launching the bottleServer")
     run(app=plumbum, host=host, port=port)
-
-def _start_as_wsgi():
     
 if __name__ == '__main__':
     """Start the server if it's launch directly from the command line. 
