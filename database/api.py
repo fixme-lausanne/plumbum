@@ -26,20 +26,26 @@ class NonExistentUID(Exception):
 
 
 def post(utf8_text, expiry_policy=EXPIRY_NEVER, prefered_uid=None,
-         linked_uid_list=None):
-        if expiry_policy not in api.expiry_policies:
-            raise ValueError("Policy %s is not in policies" % expiry_policy)
-        entry = {}
-        entry['text'] = utf8_text
-        entry['expiry_policy'] = expiry_policy
-        entry['timestamp'] = str(time.time())
-        entry['read_timestamp'] = None
-        entry['linked'] = linked_uid_list
-        db.write(entry, prefered_uid)
+        linked_uid_list=None):
+    if expiry_policy not in api.expiry_policies:
+        raise ValueError("Policy %s is not in policies" % expiry_policy)
+    entry = {}
+    entry['text'] = utf8_text
+    entry['expiry_policy'] = expiry_policy
+    entry['timestamp'] = str(time.time())
+    entry['read_timestamp'] = None
+    entry['linked'] = linked_uid_list
+    db.write(entry, prefered_uid)
 
 
-def retrieve(uid):
-    
+def retrieve(uid)
+    entry = db.read(uid)
+    is_expired = _check_expiry(entry)
+    if is_expired:
+        delete(uid)
+        raise NonExistentUID(uid)
+    else:
+        return entry['text']
 
 def get_linked(uid):
     pass
