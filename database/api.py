@@ -18,7 +18,13 @@ class NonExistentUID(Exception):
 
 def post(utf8_text, expiry_policy=EXPIRY_NEVER, prefered_uid=None,
          linked_uid_list=None):
-    pass
+        if expiry_policy not in api.expiry_policies:
+            raise ValueError("Policy %s is not in policies" % expiry_policy)
+        entry = {}
+        entry['utf8_text'] = utf8_text
+        entry['expiry_policy'] = expiry_policy
+        entry['timestamp'] = str(time.time())
+        entry['read_timestamp'] = None;
 
 
 def retrieve(uid):

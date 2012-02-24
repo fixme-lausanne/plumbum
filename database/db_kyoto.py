@@ -41,13 +41,6 @@ class KyotoDB(db.DataBase):
             raise db.DataBaseError("open error: " + str(db.error()))
         
     def write(utf8_content, preferred_uid=None):
-        if expiry_policy not in api.expiry_policies:
-            raise ValueError("Policy %s is not in policies" % expiry_policy)
-        entry = {}
-        entry['utf8_text'] = utf8_text
-        entry['expiry_policy'] = expiry_policy
-        entry['timestamp'] = str(time.time())
-        entry['read_timestamp'] = None;
         if preferred_uid is None:
             hash_ = utils.make_uid(utf8_text, expiry_policy, entry['timestamp'])
         else:

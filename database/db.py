@@ -22,7 +22,6 @@ class DataBase(object):
     def write(utf8_content, preferred_uid=None):
         pass
 
-
 class NonExistentUID(Exception):
     def __init__(self, uid):
         self.uid = uid

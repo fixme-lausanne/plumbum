@@ -38,7 +38,6 @@ class MemoryDB(db.DataBase):
                 uid = utils.make_uid(utf8_content, timestamp)
             else:
                 uid = preferred_uid
-
             while uid in MemoryDB._DB:
                 uid = utils.refine_uid()
             MemoryDB._DB[uid] = utf8_content
