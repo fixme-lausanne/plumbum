@@ -1,0 +1,3 @@
+-- rewrite  the api to follow the new db notation
+-- rewrite kyoto db to the new db api
+-- rewrite mongo to be more effective (not a real key-value database)
