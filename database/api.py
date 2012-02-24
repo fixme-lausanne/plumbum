@@ -4,9 +4,7 @@ except:
     try:
         import db_mongo as db
     except:
-        try:
-            import db_memory as db
-
+        import db_memory as db
 EXPIRY_NEVER = 1
 EXPIRY_HOUR_FROM_READ = 2
 EXPIRY_HOUR_FROM_WRITE = 3

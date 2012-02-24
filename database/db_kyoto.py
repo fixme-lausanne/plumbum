@@ -30,6 +30,7 @@ TODO
 ----
 linked_uid_list is not implemented
 """
+
 class KyotoDB(db.DataBase):
     _DB = None
 
