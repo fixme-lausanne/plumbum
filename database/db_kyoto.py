@@ -3,8 +3,7 @@ import json
 import kyotocabinet as kc
 import database.api as api
 import database.utils as utils
-from db import DataBase
-
+import db
 """ Interact with Kyoto Cabinet
 
 Example
@@ -40,17 +39,8 @@ class KyotoDB(db.DataBase):
         KyotoDB._DB = kc.DB()
         if not db.open(db_file, kc.DB.OWRITER | kc.DB.OCREATE):
             raise db.DataBaseError("open error: " + str(db.error()))
-            
-    def delete(uid):
-        pass
-    def read(uid):
-        pass
         
     def write(utf8_content, preferred_uid=None):
-                    expiry_policy=api.EXPIRY_NEVER,
-            preferred_uid=None,
-            linked_uid_list=None):
-        _check_db()
         if expiry_policy not in api.expiry_policies:
             raise ValueError("Policy %s is not in policies" % expiry_policy)
         entry = {}

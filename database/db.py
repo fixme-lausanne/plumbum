@@ -7,18 +7,18 @@ TextAndTimestamp = namedtuple('TextAndTimestamp', 'text timestamp')
 class DataBase(object):
     __metaclass__ = ABCMeta
 
-    @abstractmethod
     @staticmethod
+    @abstractmethod
     def delete(uid):
         pass
         
-    @abstractmethod
     @staticmethod
+    @abstractmethod
     def read(uid):
         pass
     
-    @abstractmethod
     @staticmethod
+    @abstractmethod
     def write(utf8_content, preferred_uid=None):
         pass
 
