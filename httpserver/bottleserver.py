@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Plumbum http server based on bottle"""
+"""plumbum http server based on bottle"""
 from os.path import dirname, abspath, join
 import sys
 sys.path.append(dirname(dirname(abspath(__file__))))
@@ -25,16 +25,16 @@ def template(path, base='templates', **kwargs):
     """Generate the content of the template"""
     return _template(join(base, path), kwargs)
 
-PLUMBUM = Bottle()
+plumbum = Bottle()
 
 
-@PLUMBUM.route('/', method='GET')
+@plumbum.route('/', method='GET')
 def index():
     """Display the home page"""
     return template('paste_form')
 
 
-@PLUMBUM.route('/', method='POST')
+@plumbum.route('/', method='POST')
 def post():
     """Post a new pastebin"""
     content = request.forms.get('content')
@@ -52,8 +52,8 @@ def post():
         return HTTPResponse(raw_url, status=201, header={'Location': raw_url})
 
 
-@PLUMBUM.route('/:uid/raw', method='GET')
-@PLUMBUM.route('/:uid/raw/', method='GET')
+@plumbum.route('/:uid/raw', method='GET')
+@plumbum.route('/:uid/raw/', method='GET')
 def raw_retrieve(uid):
     """Fetch a pastebin entry without coloration"""
     try:
@@ -62,8 +62,8 @@ def raw_retrieve(uid):
         abort(404, 'No such item "%s"' % uid)
 
 
-@PLUMBUM.route('/:uid', method='GET')
-@PLUMBUM.route('/:uid/', method='GET')
+@plumbum.route('/:uid', method='GET')
+@plumbum.route('/:uid/', method='GET')
 def retrieve(uid):
     """Fetch a pastebin entry with coloration using Pygments lib"""
     user = request.get_header("User-Agent")
@@ -84,14 +84,16 @@ def retrieve(uid):
     else:
         return raw_retrieve(uid)
 
-def start(host='0.0.0.0', port=8080):
+def start(host='0.0.0.0', port=8080, wsgi=False, server=):
     """start the app, that's all"""
     logging.debug("Launching the bottleServer")
-    run(app=PLUMBUM, host=host, port=port)
+    run(app=plumbum, host=host, port=port)
 
+def _start_as_wsgi():
+    
 if __name__ == '__main__':
     """Start the server if it's launch directly from the command line. 
     It will be in DEBUG mode
     """
     logging.getLogger().setLevel(logging.DEBUG)
-    run(PLUMBUM, host='localhost', port=8080, debug=True, reloader=True)
+    run(plumbum, host='localhost', port=8080, debug=True, reloader=True)

@@ -38,13 +38,18 @@ class KyotoDB(db.DataBase):
         KyotoDB._DB = kc.DB()
         if not db.open(db_file, kc.DB.OWRITER | kc.DB.OCREATE):
             raise db.DataBaseError("open error: " + str(db.error()))
-        
+    
+    @staticmethod
     def write(utf8_content, preferred_uid=None):
         if preferred_uid is None:
             uid = utils.make_uid(utf8_content)
         else:
             uid = preferred_uid
         KyotoDB._DB[uid] = entry
+    
+    @staticmethod
+    def read():
+        pass
 
     def _retrieve_json(uid):
         _check_db()

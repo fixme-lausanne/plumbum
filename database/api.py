@@ -1,3 +1,12 @@
+try:
+    import db_kyoto as db
+except:
+    try:
+        import db_mongo as db
+    except:
+        try:
+            import db_memory as db
+
 EXPIRY_NEVER = 1
 EXPIRY_HOUR_FROM_READ = 2
 EXPIRY_HOUR_FROM_WRITE = 3
@@ -21,14 +30,16 @@ def post(utf8_text, expiry_policy=EXPIRY_NEVER, prefered_uid=None,
         if expiry_policy not in api.expiry_policies:
             raise ValueError("Policy %s is not in policies" % expiry_policy)
         entry = {}
-        entry['utf8_text'] = utf8_text
+        entry['text'] = utf8_text
         entry['expiry_policy'] = expiry_policy
         entry['timestamp'] = str(time.time())
-        entry['read_timestamp'] = None;
+        entry['read_timestamp'] = None
+        entry['linked'] = linked_uid_list
+        db.write(entry, prefered_uid)
 
 
 def retrieve(uid):
-    pass
+    
 
 def get_linked(uid):
     pass
