@@ -23,9 +23,8 @@ class MongoDB(db.DataBase):
     
     @staticmethod
     def write(utf8_content, preferred_uid=None):
-        timestamp = time.time()
         if preferred_uid is None:
-            uid = utils.make_uid(utf8_content, timestamp)
+            uid = utils.make_uid(utf8_content)
         else:
             uid = preferred_uid
         print(dir(MongoDB._DB))

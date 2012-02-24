@@ -2,7 +2,6 @@ from collections import namedtuple
 from threading import Lock as TLock
 from multiprocessing import Lock as PLock
 import utils as utils
-import time
 import db
 """Just an abstract class for a database"""
 
@@ -33,9 +32,8 @@ class MemoryDB(db.DataBase):
     @staticmethod
     def write(utf8_content, preferred_uid=None):
         with MemoryDB._PLOCK and MemoryDB._TLOCK:
-            timestamp = time.time()
             if preferred_uid is None:
-                uid = utils.make_uid(utf8_content, timestamp)
+                uid = utils.make_uid(utf8_content)
             else:
                 uid = preferred_uid
             while uid in MemoryDB._DB:
