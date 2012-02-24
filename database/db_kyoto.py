@@ -1,4 +1,3 @@
-import time
 import json
 import kyotocabinet as kc
 import database.api as api
@@ -42,16 +41,10 @@ class KyotoDB(db.DataBase):
         
     def write(utf8_content, preferred_uid=None):
         if preferred_uid is None:
-            hash_ = utils.make_uid(utf8_text, expiry_policy, entry['timestamp'])
+            uid = utils.make_uid(utf8_content)
         else:
-            hash_ = preferred_uid
-        KyotoDB._DB[hash_] = entry
-        
-    def close():
-        global db
-        if KyotoDB._DB != None and not KyotoDB._DB.close():
-            raise DataBaseError("close error: " + str(KyotoDB._DB.error()))
-        db = None
+            uid = preferred_uid
+        KyotoDB._DB[uid] = entry
 
     def _retrieve_json(uid):
         _check_db()
@@ -64,3 +57,9 @@ class KyotoDB(db.DataBase):
     def _check_db():
         if db == None:
             init()
+        
+    def close():
+        global db
+        if KyotoDB._DB != None and not KyotoDB._DB.close():
+            raise DataBaseError("close error: " + str(KyotoDB._DB.error()))
+        db = None
