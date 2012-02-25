@@ -11,6 +11,12 @@ import unittest
 class Test(unittest.TestCase):
     SHORT_WRITE = "amenophis3"
         
+    def setUp(self):
+        dbk.init()
+    
+    def tearDown(self):
+        dbk.close()
+
     def test_wrong_retrieve(self):
         self.assertRaises(NonExistentUID, dbk.read, "ee229238")
 

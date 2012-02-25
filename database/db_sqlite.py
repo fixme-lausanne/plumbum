@@ -1,35 +1,8 @@
 import json
 import sqlite3
 import db
-import database.utils as utils
-import db
-""" Interact with Kyoto Cabinet
-
-Example
--------
-
-import db_kyoto as dbk
-dbk.init()
-uid = dbk.post("test")
-print(dbk.retrieve(uid))
-
-Notes
------
-
-All db access methods will raise a DataBaseError if they don't succeed.
-Thus you should enclose them in a try-except like:
-
-try:
-    uid = dbk.post("test")
-except DataBaseError
-    pass
-
-The database connection is lazy, if it does not exist, it will be attempted.
-
-TODO
-----
-linked_uid_list is not implemented
-"""
+import utils
+import logging
 
 class SqliteDB(db.DataBase):
     _DB = None
@@ -37,10 +10,14 @@ class SqliteDB(db.DataBase):
     @staticmethod
     def init(db_file="casket.sqlite"):
         SqliteDB._DB = sqlite3.Connection(db_file)
-        
+        #init table for key/value use
+        SqliteDB._DB.execute("""CREATE TABLE IF NOT EXISTS PASTE (
+        UID         VARCHAR (10)      NOT NULL,
+        JSON        VARCHAR           NOT NULL)""")
+            
     @staticmethod
     def delete(uid):
-        sql_command = 
+        sql_command = "DROP UID"
         SqliteDB._DB.execute(sql_command)
 
     @staticmethod
@@ -51,26 +28,37 @@ class SqliteDB(db.DataBase):
             uid = preferred_uid
         while SqliteDB._retrieve_json(uid):
             uid = utils.refine_uid()
-        SqliteDB._insert_json(uid, entry)
-    
+        SqliteDB._insert_json(uid, utf8_content)
+        return uid
+        
     @staticmethod
-    def read():
+    def read(uid):
         jentry = SqliteDB._retrieve_json(uid)
         if not jentry:
             raise db.NonExistentUID(uid)
         else:
-            return json.loads(jentry.decode())
+            return jentry
     
     @staticmethod
     def _retrieve_json(uid):
-        sql_command = 
-        jentry = SqliteDB.execute(sql_command)
+        sql_command = "SELECT JSON FROM PASTE WHERE UID=?;"
+        c = SqliteDB._DB.cursor()
+        c.execute(sql_command, [uid])
+        st = c.fetchone()
+        if st:
+            return st[0]
+        else: 
+            return None
     
     @staticmethod
     def _insert_json(uid, content):
-        sql_command = 
-        jentry = SqliteDB.execute(sql_command)
-    
+        sql_command = "INSERT INTO PASTE (UID, JSON) VALUES (?, ?)"
+        c = SqliteDB._DB.cursor()
+        c.execute(sql_command, [uid, content])
+        SqliteDB._DB.commit()
+
     @staticmethod
     def close():
+        SqliteDB._DB.execute("DROP TABLE IF EXISTS PASTE")
         SqliteDB._DB.close()
+    
