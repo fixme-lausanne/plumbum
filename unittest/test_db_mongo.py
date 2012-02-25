@@ -2,20 +2,21 @@
 from os.path import dirname, abspath, join
 import sys
 sys.path.append(join(dirname(dirname(abspath(__file__))), "database"))
-from db_sqlite import SqliteDB as dbk
-import logging
+from db_mongo import MongoDB as dbk
 from db import NonExistentUID
 
 import unittest
 
 class Test(unittest.TestCase):
     SHORT_WRITE = "amenophis3"
-        
+    
+    def SetUp(self):
+        dbk.init()
+
     def test_wrong_retrieve(self):
         self.assertRaises(NonExistentUID, dbk.read, "ee229238")
 
     def test_write_n_retrieve(self):
-        dbk.init()
         uid = dbk.write(Test.SHORT_WRITE)
         ret = dbk.read(uid)
         assert ret == Test.SHORT_WRITE
