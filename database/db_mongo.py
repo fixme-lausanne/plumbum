@@ -1,11 +1,10 @@
 import utils as utils
-import time
 import pymongo
 import db
 
 class MongoDB(db.DataBase):
     _DB = pymongo.Connection('localhost', 27017)['plumbum']['plumbum']
-    
+
     @staticmethod
     def init():
         MongoDB._DB.create_index('key')
@@ -27,7 +26,6 @@ class MongoDB(db.DataBase):
             uid = utils.make_uid(utf8_content)
         else:
             uid = preferred_uid
-        print(dir(MongoDB._DB))
         while MongoDB._DB.find(uid):
             uid = utils.refine_uid()
         MongoDB._DB.create_collection(uid)
