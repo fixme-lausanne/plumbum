@@ -84,14 +84,14 @@ def retrieve(uid):
     else:
         return raw_retrieve(uid)
 
-def start(host='0.0.0.0', port=8080, wsgi=False):
+def start(**kwargs):
     """start the app, that's all"""
     logging.debug("Launching the bottleServer")
-    run(app=plumbum, host=host, port=port)
+    run(kwargs, app=plumbum)
     
 if __name__ == '__main__':
     """Start the server if it's launch directly from the command line. 
     It will be in DEBUG mode
     """
     logging.getLogger().setLevel(logging.DEBUG)
-    run(plumbum, host='localhost', port=8080, debug=True, reloader=True)
+    start(host='localhost', port=8080, debug=True, reloader=True)
