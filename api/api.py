@@ -26,7 +26,10 @@ class NonExistentUID(Exception):
         return repr(self.uid)
 
 
-def post(utf8_text, expiry_policy=EXPIRY_NEVER, prefered_uid=None,linked_uid_list=None):
+def post(utf8_text, expiry_policy=EXPIRY_NEVER, preferred_uid=None,linked_uid_list=None):
+    if not utf8_text:
+        return None
+    
     if expiry_policy not in expiry_policies:
         raise ValueError("Policy %s is not in policies" % expiry_policy)
     entry = {}
@@ -35,7 +38,8 @@ def post(utf8_text, expiry_policy=EXPIRY_NEVER, prefered_uid=None,linked_uid_lis
     entry['timestamp'] = str(time.time())
     entry['read_timestamp'] = None
     entry['linked'] = linked_uid_list
-    database.write(entry, prefered_uid)
+    uid = database.write(entry, preferred_uid)
+    return uid
 
 
 def retrieve(uid):
