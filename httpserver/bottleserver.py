@@ -2,6 +2,7 @@
 """plumbum http server based on bottle"""
 from os.path import dirname, abspath, join
 import sys
+print(dirname(dirname(abspath(__file__))))
 sys.path.append(dirname(dirname(abspath(__file__))))
 
 import logging
@@ -15,7 +16,7 @@ except ImportError:
     coloration')
     PYGMENT_SET = False
     
-import database as db
+import api.api
 from bottle import run, request, abort, HTTPResponse, Bottle
 from bottle import template as _template
 
@@ -43,7 +44,7 @@ def post():
     prefered_uid = request.forms.get('puid')
     if not prefered_uid:
         prefered_uid = None
-    uid = db.post(content, prefered_uid=prefered_uid)
+    uid = api.post(content, prefered_uid=prefered_uid)
     url = '%s%s' % (request.url, uid)
     raw_url = url + '/raw'
     if request.forms.get('from_form'):
@@ -57,8 +58,8 @@ def post():
 def raw_retrieve(uid):
     """Fetch a pastebin entry without coloration"""
     try:
-        return db.retrieve(uid)
-    except db.NonExistentUID:
+        return api.retrieve(uid)
+    except api.NonExistentUID:
         abort(404, 'No such item "%s"' % uid)
 
 
@@ -71,14 +72,14 @@ def retrieve(uid):
         return raw_retrieve(uid)
     if PYGMENT_SET :
         try:
-            raw_paste = db.retrieve(uid)
+            raw_paste = api.retrieve(uid)
             colorized_style = HtmlFormatter().get_style_defs('.highlight')
             colorized_content = highlight(raw_paste, guess_lexer(raw_paste),
              HtmlFormatter())
             return template('colorized', uid=uid, 
             colorized_style=colorized_style, 
             colorized_content=colorized_content)
-        except db.NonExistentUID:
+        except api.NonExistentUID:
             logging.debug("404 occured on item %s" % uid)
             abort(404, 'No such item "%s"' % uid)
     else:

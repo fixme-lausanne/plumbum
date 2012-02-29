@@ -15,10 +15,11 @@ from os.path import dirname, abspath
 import sys
 sys.path.append(dirname(dirname(abspath(__file__))))
 
-import database as db
+import api
 
 class GeneralHandler(SocketServer.BaseRequestHandler):
     BUF_SIZE = 1024
+    
     @staticmethod
     def set_v6():
         GeneralHandler.address_family = socket.AF_INET6
@@ -49,7 +50,7 @@ class GetHandler(GeneralHandler):
         decoded_uid = "".join(uid).rstrip()
         logging.debug("Uid decoded is |%s|" % decoded_uid)
         try:
-            data = db.retrieve(decoded_uid)
+            data = api.retrieve(decoded_uid)
         except db.NonExistentUID:
             data = "Uid %s not found" % decoded_uid
         state = self.request.sendall(data.encode("UTF-8"))
@@ -78,7 +79,7 @@ class PostHandler(GeneralHandler):
             content += buf
         decoded_content = "".join(content).rstrip()
         logging.debug("Content uploaded is :|%s|" % decoded_content)
-        uid = db.post(decoded_content)
+        uid = api.post(decoded_content)
         logging.debug("Uid is :|%s|" % uid)
         state = self.request.sendall(uid.encode('UTF-8'))
         if state:
