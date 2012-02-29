@@ -88,7 +88,8 @@ def retrieve(uid):
 def start(**kwargs):
     """start the app, that's all"""
     logging.debug("Launching the bottleServer")
-    run(kwargs, app=plumbum)
+    kwargs['app']=plumbum
+    run(**kwargs)
     
 if __name__ == '__main__':
     """Start the server if it's launch directly from the command line. 
