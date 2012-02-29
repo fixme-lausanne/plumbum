@@ -4,7 +4,7 @@ sys.path.append(join(dirname(dirname(abspath(__file__))), "database"))
 
 #TODO import and test DBs
 
-from db_memory import MemoryDB as db
+import database
 import time
 import datetime
 
@@ -35,19 +35,19 @@ def post(utf8_text, expiry_policy=EXPIRY_NEVER, prefered_uid=None,linked_uid_lis
     entry['timestamp'] = str(time.time())
     entry['read_timestamp'] = None
     entry['linked'] = linked_uid_list
-    db.write(entry, prefered_uid)
+    database.write(entry, prefered_uid)
 
 
 def retrieve(uid):
-    entry = db.read(uid)
+    entry = database.read(uid)
     if _is_expired(entry):
-        db.delete(uid)
+        database.delete(uid)
         raise NonExistentUID(uid)
     else:
         return entry['text']
 
 def get_linked(uid):
-    entry = db.read(uid)
+    entry = database.read(uid)
     return entry['linked']
 
 def _is_expired(entry):

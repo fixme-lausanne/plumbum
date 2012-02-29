@@ -88,7 +88,7 @@ def retrieve(uid):
 def start(**kwargs):
     """start the app, that's all"""
     logging.debug("Launching the bottleServer")
-    kwargs['app']=plumbum
+    kwargs['app'] = plumbum
     run(**kwargs)
     
 if __name__ == '__main__':
