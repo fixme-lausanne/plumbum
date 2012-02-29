@@ -19,6 +19,10 @@ import database as db
 
 class GeneralHandler(SocketServer.BaseRequestHandler):
     BUF_SIZE = 1024
+    @staticmethod
+    def set_v6():
+        GeneralHandler.address_family = socket.AF_INET6
+        
     def setup(self):
         logging.debug('%s connected!' % str(self.client_address))
         

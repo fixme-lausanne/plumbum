@@ -12,7 +12,7 @@ try:
     PYGMENT_SET = True
 except ImportError:
     logging.error('Cannot import pygments lib, will not provide \
-coloration')
+    coloration')
     PYGMENT_SET = False
     
 import database as db

@@ -7,6 +7,7 @@ sys.path.append(dirname(abspath(__file__)))
 from db_memory import MemoryDB as db
 import time
 import datetime
+
 EXPIRY_NEVER = 1
 EXPIRY_HOUR_FROM_READ = 2
 EXPIRY_HOUR_FROM_WRITE = 3
@@ -39,17 +40,17 @@ def post(utf8_text, expiry_policy=EXPIRY_NEVER, prefered_uid=None,linked_uid_lis
 
 def retrieve(uid):
     entry = db.read(uid)
-    is_expired = _check_expiry(entry)
-    if is_expired:
+    if _is_expired(entry):
         db.delete(uid)
         raise NonExistentUID(uid)
     else:
         return entry['text']
 
 def get_linked(uid):
-    pass
+    entry = db.read(uid)
+    return entry['linked']
 
-def _check_expiry(entry):
+def _is_expired(entry):
     timestamp = datetime.date.fromtimestamp(float(entry['timestamp']))
     now = datetime.date.fromtimestamp(time.time())
     policy = entry['expiry_policy']
