@@ -10,7 +10,7 @@ Python 3.x based pastebin implementation.
 
 ## Authors
 
-Initially developed at [FIXME](http://hackerspaces.org/wiki/FIXME) the Lasuanne
+Initially developed at [FIXME](http://hackerspaces.org/wiki/FIXME) the Lausanne
 hackerspace during [First Coding Night](https://fixme.ch/wiki/CodingNight1).
 
 gcmalloc <gcmalloc@gmail.com>
@@ -33,5 +33,5 @@ Just run:
 
     ./plumbum.py
 
-This will attempt to start the http and socket servers using a suitable
-backend. (Instructions on how to acces the server provided by command.)
+This will attempt to start the http and socket servers using a suitable configuration.
+The http server WON'T support load, you should go to apache as the default one is just a dev http.
