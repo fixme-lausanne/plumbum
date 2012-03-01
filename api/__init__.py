@@ -5,5 +5,5 @@ print(sys.path)
 sys.path.append(dirname(abspath(__file__)))
 #test of module choice should be done there
 
-import api
-#from db_memory import MemoryDB as __module__
+from api_method import post, retrieve, get_linked
+from api_method import NonExistentUID

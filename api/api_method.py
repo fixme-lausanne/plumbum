@@ -1,6 +1,6 @@
 from os.path import dirname, abspath, join
 import sys
-sys.path.append(join(dirname(dirname(abspath(__file__))), "database"))
+sys.path.append(dirname(dirname(abspath(__file__))))
 
 #TODO import and test DBs
 
