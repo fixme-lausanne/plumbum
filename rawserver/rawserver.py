@@ -91,7 +91,7 @@ def start(host=''):
     get_server = SocketServer.ThreadingTCPServer((host, 1339), GetHandler)
     Thread(target=get_server.serve_forever).start()
     logging.debug("get is started !!")
-    post_server.serve_forever()
+    Thread(target=post_server.serve_forever).start()
     logging.debug("post is started !!")
     
 if __name__ == "__main__":

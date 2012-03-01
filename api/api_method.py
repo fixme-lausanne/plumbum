@@ -17,15 +17,6 @@ EXPIRY_WEEK_FROM_WRITE = 5
 expiry_policies = (EXPIRY_NEVER, EXPIRY_WEEK_FROM_READ, EXPIRY_WEEK_FROM_WRITE,
         EXPIRY_HOUR_FROM_READ, EXPIRY_HOUR_FROM_WRITE)
 
-
-class NonExistentUID(Exception):
-    def __init__(self, uid):
-        self.uid = uid
-
-    def __str__(self):
-        return repr(self.uid)
-
-
 def post(utf8_text, expiry_policy=EXPIRY_NEVER, preferred_uid=None,linked_uid_list=None):
     if not utf8_text:
         return None
@@ -46,7 +37,7 @@ def retrieve(uid):
     entry = database.read(uid)
     if _is_expired(entry):
         database.delete(uid)
-        raise NonExistentUID(uid)
+        raise database.NonExistentUID(uid)
     else:
         return entry['text']
 

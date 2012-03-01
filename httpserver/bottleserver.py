@@ -2,8 +2,9 @@
 """plumbum http server based on bottle"""
 from os.path import dirname, abspath, join
 import sys
-print(dirname(dirname(abspath(__file__))))
 sys.path.append(dirname(dirname(abspath(__file__))))
+
+base_dir = dirname(abspath(__file__))
 
 import logging
 try:
@@ -16,7 +17,7 @@ except ImportError:
     coloration')
     PYGMENT_SET = False
     
-import api.api
+import api
 from bottle import run, request, abort, HTTPResponse, Bottle
 from bottle import template as _template
 
@@ -24,7 +25,7 @@ RAW_USER_AGENT = ["curl", "wget", "links", "lynks", "elinks"]
 
 def template(path, base='templates', **kwargs):
     """Generate the content of the template"""
-    return _template(join(base, path), kwargs)
+    return _template(join(base_dir, join(base, path)), kwargs)
 
 plumbum = Bottle()
 
@@ -41,10 +42,10 @@ def post():
     content = request.forms.get('content')
     if content == "":
         abort(404, "You must provide a content")
-    prefered_uid = request.forms.get('puid')
-    if not prefered_uid:
-        prefered_uid = None
-    uid = api.post(content, prefered_uid=prefered_uid)
+    preferred_uid = request.forms.get('puid')
+    if not preferred_uid:
+        preferred_uid = None
+    uid = api.post(content, preferred_uid=preferred_uid)
     url = '%s%s' % (request.url, uid)
     raw_url = url + '/raw'
     if request.forms.get('from_form'):
