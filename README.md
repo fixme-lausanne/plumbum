@@ -4,9 +4,11 @@ Python 3.x based pastebin implementation.
 
 ## Dependencies
 
+Those are not mandatory, you will just not get the best out of plumbum
 * [Pygments](http://pygments.org/)
 * [Bottle](http://bottlepy.org/docs/dev/)
 * [Kyoto Cabinet](http://fallabs.com/kyotocabinet/)
+
 
 ## Authors
 
