@@ -13,13 +13,13 @@ Python 3.x based pastebin implementation.
 Initially developed at [FIXME](http://hackerspaces.org/wiki/FIXME) the Lausanne
 hackerspace during [First Coding Night](https://fixme.ch/wiki/CodingNight1).
 
-gcmalloc <gcmalloc@gmail.com>
-Valentin Haenel <valentin.haenel@gmx.de>
-Nicholas Wolff <nwolff@gmail.com>
-Dan Kalotay <d.kalotay@gmail.com>
-Rorist <aubort.jeanbaptiste@gmail.com>
-carre <carre@lenimac15.(none)>
-speredenn <jbc@gmx.se>
+* gcmalloc <gcmalloc@gmail.com>
+* Valentin Haenel <valentin.haenel@gmx.de>
+* Nicholas Wolff <nwolff@gmail.com>
+* Dan Kalotay <d.kalotay@gmail.com>
+* Rorist <aubort.jeanbaptiste@gmail.com>
+* carre <carre@lenimac15.(none)>
+* speredenn <jbc@gmx.se>
 
 ## Installation
 
