@@ -56,6 +56,8 @@ def post():
 
 @plumbum.route('/:uid/raw', method='GET')
 @plumbum.route('/:uid/raw/', method='GET')
+@plumbum.route('/raw/:uid', method='GET')
+@plumbum.route('/raw/:uid/', method='GET')
 def raw_retrieve(uid):
     """Fetch a pastebin entry without coloration"""
     try:
