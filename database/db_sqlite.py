@@ -1,8 +1,13 @@
-import json
 import sqlite3
 import db
 import utils
-import logging
+
+def test_init(f):
+    def wrapper(*args, **kw):
+        if SqliteDB._DB == None:
+            SqliteDB.init()
+        return f(*args, **kw)
+    return wrapper
 
 class SqliteDB(db.DataBase):
     _DB = None
@@ -16,11 +21,13 @@ class SqliteDB(db.DataBase):
         JSON        VARCHAR           NOT NULL)""")
             
     @staticmethod
+    @test_init
     def delete(uid):
         sql_command = "DROP UID"
         SqliteDB._DB.execute(sql_command)
-
+    
     @staticmethod
+    @test_init
     def write(utf8_content, preferred_uid=None):
         if preferred_uid is None:
             uid = utils.make_uid(utf8_content)
@@ -30,8 +37,9 @@ class SqliteDB(db.DataBase):
             uid = utils.refine_uid()
         SqliteDB._insert_json(uid, utf8_content)
         return uid
-        
+
     @staticmethod
+    @test_init
     def read(uid):
         jentry = SqliteDB._retrieve_json(uid)
         if not jentry:
@@ -40,6 +48,7 @@ class SqliteDB(db.DataBase):
             return jentry
     
     @staticmethod
+    @test_init
     def _retrieve_json(uid):
         sql_command = "SELECT JSON FROM PASTE WHERE UID=?;"
         c = SqliteDB._DB.cursor()
@@ -51,14 +60,15 @@ class SqliteDB(db.DataBase):
             return None
     
     @staticmethod
+    @test_init
     def _insert_json(uid, content):
         sql_command = "INSERT INTO PASTE (UID, JSON) VALUES (?, ?)"
         c = SqliteDB._DB.cursor()
         c.execute(sql_command, [uid, content])
         SqliteDB._DB.commit()
-
+    
     @staticmethod
     def close():
         SqliteDB._DB.execute("DROP TABLE IF EXISTS PASTE")
         SqliteDB._DB.close()
-    
+        SqliteDB._DB = None
